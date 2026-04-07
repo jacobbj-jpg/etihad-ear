@@ -1,5 +1,7 @@
 {
-  "last_trigger": "",
-  "last_trigger_date": "",
-  "used_players": []
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-04-07",
+  "used_players": [
+    "Cole Palmer"
+  ]
 }
