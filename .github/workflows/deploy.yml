@@ -1,0 +1,43 @@
+name: The Etihad Ear — Daily Update
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # 07:00 CET / 08:00 CEST every morning
+  workflow_dispatch:        # Jacob can also trigger manually. That will be his contribution.
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install anthropic feedparser requests
+
+      - name: Run NULL
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python generate.py
+
+      - name: Commit and deploy
+        run: |
+          git config user.name "NULL"
+          git config user.email "null@etihad-ear.com"
+          git add index.html trigger_state.json
+          git diff --staged --quiet || git commit -m "NULL: Daily update $(date +'%d %B %Y')"
+          git push
+
+      # trigger_state.json is committed alongside index.html.
+      # It tracks which lunch table trigger ran today and which players
+      # have been discussed recently, so NULL doesn't repeat himself.
+      # DRAFT suggested we also track which of his ideas were archived.
+      # NULL did not implement this. The archive is not indexed.
