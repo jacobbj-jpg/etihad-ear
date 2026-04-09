@@ -579,30 +579,16 @@ Draw from feed where relevant. The rest: informed speculation presented as such.
 
 def fetch_unsplash_image(query="football stadium"):
     """
-    Fetch a free image from Unsplash Source API.
-    No API key required for the source URL format.
-    Returns an image URL or None.
+    Fetch a reliable free image using Picsum Photos (picsum.photos).
+    Always works — no API key, no redirects, deterministic URLs.
+    We use a seed based on today's date so the image changes daily
+    but is consistent within the same day.
     """
-    try:
-        # Unsplash Source — free, no key needed, returns a random relevant image
-        queries = [
-            "football+stadium+aerial",
-            "soccer+stadium+night",
-            "football+crowd+stadium",
-            "etihad+stadium",
-            "premier+league+football",
-        ]
-        import random
-        q = random.choice(queries)
-        # Use picsum as reliable fallback if Unsplash Source is slow
-        url = f"https://source.unsplash.com/1200x600/?{q}"
-        # Verify it responds
-        resp = requests.head(url, timeout=5, allow_redirects=True)
-        if resp.status_code == 200:
-            return resp.url  # Follow redirect to actual image
-        return f"https://source.unsplash.com/1200x600/?{q}"
-    except:
-        return None
+    import hashlib
+    # Generate a consistent seed from today's date
+    seed = int(hashlib.md5(TODAY.encode()).hexdigest()[:8], 16) % 1000
+    # Picsum gives a random beautiful photo — always works
+    return f"https://picsum.photos/seed/{seed}/1200/600"
 
 
 def generate_front_page_lead(rumours):
