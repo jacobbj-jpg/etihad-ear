@@ -526,7 +526,7 @@ The null_comment can be more speculative — it's NULL's opinion."""
 
 
 def generate_gossip(feed_items):
-    """NULL generates gossip in 3-part tabloid structure."""
+    """NULL generates gossip across all sub-sections."""
     print("\n👀 NULL generating gossip...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -534,38 +534,35 @@ def generate_gossip(feed_items):
 Feed data:
 {format_feed(feed_items)}
 
-Generate 4 dressing room gossip items and 4 training ground rumours.
+Generate gossip for The Etihad Ear across four categories.
 
 CRITICAL — each item has THREE parts:
 1. headline: Punchy tabloid headline. Max 10 words.
-2. body: 1-2 sentences. The gossip/rumour. What happened or what's being said.
-3. null_comment: 1-2 sentences MAX. NULL reacts. Ricky Gervais voice. One dry observation. Full stop.
+2. body: 1-2 sentences. The gossip.
+3. null_comment: 1-2 sentences MAX. NULL reacts. Ricky Gervais voice. One dry observation.
 
 Return JSON only:
 {{
   "dressing_room": [
-    {{
-      "tag": "DRESSING ROOM",
-      "headline": "Punchy headline",
-      "body": "1-2 sentences. The gossip.",
-      "null_comment": "NULL's dry reaction. One observation."
-    }}
+    {{"tag": "DRESSING ROOM", "headline": "...", "body": "...", "null_comment": "..."}}
   ],
   "training_ground": [
-    {{
-      "tag": "TRAINING",
-      "headline": "Punchy headline",
-      "body": "1-2 sentences. The rumour.",
-      "null_comment": "NULL's dry reaction."
-    }}
+    {{"tag": "TRAINING", "headline": "...", "body": "...", "null_comment": "..."}}
+  ],
+  "off_pitch": [
+    {{"tag": "OFF PITCH", "headline": "...", "body": "...", "null_comment": "..."}}
+  ],
+  "academy": [
+    {{"tag": "ACADEMY", "headline": "...", "body": "...", "null_comment": "..."}}
   ]
 }}
 
-Draw from feed where relevant. The rest: informed speculation presented as such."""
+Generate: 3 dressing_room, 3 training_ground, 2 off_pitch, 2 academy items.
+Draw from feed where relevant. The rest: informed speculation."""
 
     msg = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=2000,
+        max_tokens=2500,
         system=NULL_PERSONA,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -574,7 +571,7 @@ Draw from feed where relevant. The rest: informed speculation presented as such.
         raw = raw[raw.index("{"):raw.rindex("}")+1]
         return json.loads(raw)
     except:
-        return {"dressing_room": [], "training_ground": []}
+        return {"dressing_room": [], "training_ground": [], "off_pitch": [], "academy": []}
 
 
 def fetch_unsplash_image(query="football stadium"):
@@ -829,6 +826,7 @@ def build_team_badges(syntax_result, ctrl_result):
     }
 
 
+
 def heat_badge(n):
     colors = {5:"#cc0000",4:"#d05000",3:"#c09000",2:"#607030",1:"#404040"}
     labels = {5:"🔴 BREAKING",4:"🔥 HOT",3:"♨ WARM",2:"🌡 LUKEWARM",1:"❄ COLD"}
@@ -839,11 +837,228 @@ def tag_badge(tag):
     colors = {"BREAKING":"#cc0000","CONFIRMED":"#1a7a1a","RUMOUR":"#5050aa",
               "IN":"#1a6a1a","OUT":"#8a2a00","EXCLUSIVE":"#7a0070",
               "DRESSING ROOM":"#7a4000","TRAINING":"#004060","MYSTERY":"#400060",
-              "TACTICS":"#004040","PEP":"#004a8a","HAALAND":"#006a00"}
+              "TACTICS":"#004040","PEP":"#004a8a","HAALAND":"#006a00",
+              "OFF PITCH":"#7a0070","ACADEMY":"#005060","SHORTLIST":"#004a8a",
+              "FORUM":"#3a3a6a","MASTERPLAN":"#005a3a","MORNING GLORY":"#6a4000"}
     bg = colors.get(tag,"#444")
     return f'<span class="badge tag" style="background:{bg}">{tag}</span>'
 
-def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch_table):
+
+def generate_matchday(feed_items, last_result=None):
+    """Generate both Masterplan (next match) and Morning Glory (post match)."""
+    print("\n⚽ Generating Matchday content...")
+
+    # Masterplan — next match
+    masterplan_prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+Feed data:
+{format_feed(feed_items[:25])}
+
+Generate Matchday content for The Etihad Ear — The Masterplan section (next match focus).
+
+Return JSON only:
+{{
+  "opponent": "Chelsea",
+  "date": "Sunday 12 April 2026",
+  "time": "16:30",
+  "venue": "Stamford Bridge",
+  "competition": "Premier League",
+  "blue_moon_rising": {{
+    "headline": "Short punchy headline about the upcoming match",
+    "body": "2-3 short paragraphs. Tactic, form, stakes. NULL voice. No markdown.",
+    "null_comment": "One dry NULL observation about the match."
+  }},
+  "sharks_prey": {{
+    "headline": "Sharp headline about the opponent",
+    "body": "2-3 sentences about the opponent. Their form, weaknesses, key players. NULL voice.",
+    "null_comment": "One dry NULL observation about the opponent."
+  }},
+  "predicted_xi": [
+    {{"pos": "GK", "name": "Donnarumma", "note": "Short sharp note. Max 8 words."}},
+    {{"pos": "RB", "name": "Nunes", "note": "Short sharp note."}},
+    {{"pos": "CB", "name": "Dias", "note": "Short sharp note."}},
+    {{"pos": "CB", "name": "Guehi", "note": "Short sharp note."}},
+    {{"pos": "LB", "name": "Ait-Nouri", "note": "Short sharp note."}},
+    {{"pos": "DM", "name": "Rodri", "note": "Short sharp note."}},
+    {{"pos": "CM", "name": "Bernardo", "note": "Short sharp note."}},
+    {{"pos": "CM", "name": "O'Reilly", "note": "Short sharp note."}},
+    {{"pos": "RW", "name": "Semenyo", "note": "Short sharp note."}},
+    {{"pos": "ST", "name": "Haaland", "note": "Short sharp note."}},
+    {{"pos": "LW", "name": "Doku", "note": "Short sharp note."}}
+  ],
+  "injuries": [
+    {{"player": "Gvardiol", "status": "out", "note": "Tibial fracture. Season over."}},
+    {{"player": "Rico Lewis", "status": "doubt", "note": "Ankle. Maybe 10 April."}}
+  ]
+}}"""
+
+    msg = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=2000,
+        system=NULL_PERSONA,
+        messages=[{"role": "user", "content": masterplan_prompt}]
+    )
+    raw = msg.content[0].text.strip()
+    try:
+        raw = raw[raw.index("{"):raw.rindex("}")+1]
+        masterplan = json.loads(raw)
+    except:
+        masterplan = {}
+
+    # Morning Glory — post match
+    morning_prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+Feed data:
+{format_feed(feed_items[:20])}
+
+Generate Morning Glory post-match content for The Etihad Ear.
+This is about City's MOST RECENT completed match based on the feed.
+
+Return JSON only:
+{{
+  "opponent": "Liverpool",
+  "score": "4-0",
+  "competition": "FA Cup QF",
+  "date": "Saturday 4 April 2026",
+  "the_pint": {{
+    "headline": "Short punchy headline about the match",
+    "body": "3-4 short paragraphs. NULL reflects on the match. Gervais voice. No markdown. Max 180 words.",
+    "null_comment": "One final dry line."
+  }},
+  "ratings": [
+    {{"player": "Haaland", "rating": 10, "note": "One sharp sentence. Max 10 words."}},
+    {{"player": "Semenyo", "rating": 8, "note": "One sharp sentence."}},
+    {{"player": "Cherki", "rating": 8, "note": "One sharp sentence."}},
+    {{"player": "O'Reilly", "rating": 9, "note": "One sharp sentence."}},
+    {{"player": "Rodri", "rating": 7, "note": "One sharp sentence."}},
+    {{"player": "Bernardo", "rating": 7, "note": "One sharp sentence."}},
+    {{"player": "Trafford", "rating": 8, "note": "One sharp sentence."}}
+  ]
+}}"""
+
+    msg2 = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1500,
+        system=NULL_PERSONA,
+        messages=[{"role": "user", "content": morning_prompt}]
+    )
+    raw2 = msg2.content[0].text.strip()
+    try:
+        raw2 = raw2[raw2.index("{"):raw2.rindex("}")+1]
+        morning = json.loads(raw2)
+    except:
+        morning = {}
+
+    return {"masterplan": masterplan, "morning": morning}
+
+
+def generate_shortlist(feed_items):
+    """The Shortlist — most realistic City transfer targets with ratings."""
+    print("\n📋 Generating The Shortlist...")
+
+    prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+Feed data:
+{format_feed(feed_items[:30])}
+
+Generate The Shortlist for The Etihad Ear — City's most realistic transfer targets right now.
+
+Return JSON only:
+{{
+  "shortlist": [
+    {{
+      "name": "Player Name",
+      "club": "Current Club",
+      "position": "CM",
+      "age": 24,
+      "likelihood": 72,
+      "fee": "£65m",
+      "reason": "One sentence. Why City need them specifically.",
+      "obstacle": "One sentence. What's in the way.",
+      "null_take": "One dry NULL observation. Gervais voice."
+    }}
+  ]
+}}
+
+Generate 5 players. Mix positions — don't list five midfielders.
+Use real players from the feed where possible.
+Likelihood is a percentage (0-100). Be honest — don't give everyone 80%.
+The null_take is the best bit. Make it count."""
+
+    msg = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1500,
+        system=NULL_PERSONA,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    raw = msg.content[0].text.strip()
+    try:
+        raw = raw[raw.index("{"):raw.rindex("}")+1]
+        return json.loads(raw)["shortlist"]
+    except:
+        return []
+
+
+def generate_forum_scraper(feed_items):
+    """Forum Scraper — unverified Reddit/fan rumours clearly labelled."""
+    print("\n🗨 Generating Forum Scraper...")
+
+    reddit_items = [i for i in feed_items if "reddit" in i.get("source","").lower()]
+    if not reddit_items:
+        reddit_items = feed_items[:15]
+
+    prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+These items are from Reddit and fan forums — unverified gossip:
+{format_feed(reddit_items[:20])}
+
+Generate 4-5 forum rumour items for The Etihad Ear's Forum Scraper section.
+These are clearly unverified — fan speculation, Reddit threads, forum gossip.
+
+Return JSON only:
+{{
+  "forum_items": [
+    {{
+      "source": "r/MCFC",
+      "headline": "What fans are saying — punchy headline",
+      "body": "1-2 sentences. What the forum is claiming.",
+      "null_comment": "NULL's dry take on the reliability of this information.",
+      "credibility": "LOW"
+    }}
+  ]
+}}
+
+Credibility: LOW, MEDIUM, or SPICY (for things that sound insane but might be true)."""
+
+    msg = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1000,
+        system=NULL_PERSONA,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    raw = msg.content[0].text.strip()
+    try:
+        raw = raw[raw.index("{"):raw.rindex("}")+1]
+        return json.loads(raw)["forum_items"]
+    except:
+        return []
+
+
+def build_team_badges(syntax_result, ctrl_result):
+    return {
+        "NULL":   {"status": "PUBLISHED", "note": "Written. Processed. Done. Jacob will take credit."},
+        "SYNTAX": {"status": syntax_result.get("verdict", "APPROVED"), "note": (syntax_result.get("issues") or ["No issues found."])[0]},
+        "CTRL":   {"status": ctrl_result.get("verdict", "VERIFIED"),  "note": ctrl_result.get("note", "Sources checked.")},
+        "CACHE":  {"status": "APPROVED",  "note": "Structure reviewed. Could be simpler. Always could be simpler."},
+        "SERIF":  {"status": "APPROVED",  "note": "Mobile layout checked. The blue is still the same blue."},
+        "DRAFT":  {"status": "PENDING",   "note": "Submitted 3 new feature ideas during review. All archived."},
+        "JACOB":  {"status": "CLICKED",   "note": "Opened site. Forwarded link. Went back to sleep."},
+    }
+
+
+def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch_table,
+                matchday=None, shortlist=None, forum_items=None):
+
     team_config = [
         ("NULL",  "👾", "Editor-in-Chief",  "#00ff41", "#001a00"),
         ("SYNTAX","📝", "Language Editor",   "#60aaff", "#00101a"),
@@ -856,55 +1071,230 @@ def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch
     status_colors = {"PUBLISHED":"#00ff41","APPROVED":"#00cc33","VERIFIED":"#ffaa00",
                      "PENDING":"#555555","CLICKED":"#666666","REVISION NEEDED":"#cc4400","FLAGGED":"#cc4400"}
 
-    rumours_html = ""
     heat_colors = {"5":"#cc0000","4":"#d05000","3":"#c09000","2":"#607030","1":"#404040"}
+
+    # ── Card builders ──────────────────────────────────────────────────────
+    def card3(headline, body, null_comment, border_color="#1e3a5a", bg="#111820", headline_color="#e0e8ff", body_color="#7080a0"):
+        nc_html = f'<div class="null-take">— NULL: {null_comment}</div>' if null_comment else ""
+        return f'''<div class="card" style="border-left:3px solid {border_color};background:{bg}">
+          <div class="headline" style="color:{headline_color}">{headline}</div>
+          <div class="body-text" style="color:{body_color}">{body}</div>
+          {nc_html}
+        </div>'''
+
+    # Rumours
+    rumours_html = ""
     for i, r in enumerate(rumours[:8]):
         big = i == 0
-        big_class = "big" if big else ""
-        big_hl = "big-headline" if big else ""
         hc = heat_colors.get(str(r.get("heat",2)),"#444")
-        null_comment = r.get("null_comment","")
-        rumours_html += f"""
-        <div class="card rumour-card {big_class}" style="border-left:3px solid {hc}">
+        nc = r.get("null_comment","")
+        nc_html = f'<div class="null-take">— NULL: {nc}</div>' if nc else ""
+        rumours_html += f'''
+        <div class="card {"big" if big else ""}" style="border-left:3px solid {hc}">
           <div class="badges">{heat_badge(r.get("heat",2))} {tag_badge(r.get("tag","RUMOUR"))}</div>
-          <div class="headline {big_hl}">{r.get("headline","")}</div>
+          <div class="headline {"big-headline" if big else ""}">{r.get("headline","")}</div>
           <div class="body-text">{r.get("body","")}</div>
-          {f'<div class="null-take">— NULL: {null_comment}</div>' if null_comment else ""}
-        </div>"""
+          {nc_html}
+        </div>'''
 
+    # Gossip
     gossip_html = ""
-    for item in gossip.get("dressing_room", []):
+    for item in gossip.get("dressing_room", []) + gossip.get("training_ground", []):
+        is_training = item.get("tag","") == "TRAINING"
+        border = "#2a5a8a" if is_training else "#8a4a00"
+        bg = "#0a1020" if is_training else "#0d0800"
+        hl_col = "#d0e8ff" if is_training else "#f0d8a0"
+        body_col = "#5a80a0" if is_training else "#8a7050"
+        nc_col = "#6caee0" if is_training else "#a08040"
         nc = item.get("null_comment","")
-        gossip_html += f"""
-        <div class="card" style="border-left:3px solid #8a4a00;background:#0d0800">
-          <div class="badges">{tag_badge(item.get('tag','DRESSING ROOM'))}</div>
-          <div class="headline" style="color:#f0d8a0">{item.get('headline','')}</div>
-          <div class="body-text" style="color:#8a7050">{item.get('body','')}</div>
-          {f'<div class="null-take" style="color:#a08040;border-top-color:#2a1800">— NULL: {nc}</div>' if nc else ""}
-        </div>"""
+        nc_html = f'<div class="null-take" style="color:{nc_col};border-top-color:{border}22">— NULL: {nc}</div>' if nc else ""
+        gossip_html += f'''
+        <div class="card" style="border-left:3px solid {border};background:{bg}">
+          <div class="badges">{tag_badge(item.get("tag","DRESSING ROOM"))}</div>
+          <div class="headline" style="color:{hl_col}">{item.get("headline","")}</div>
+          <div class="body-text" style="color:{body_col}">{item.get("body","")}</div>
+          {nc_html}
+        </div>'''
 
-    training_html = ""
-    for item in gossip.get("training_ground", []):
+    # Off pitch
+    wags_html = ""
+    for item in gossip.get("off_pitch", []):
         nc = item.get("null_comment","")
-        training_html += f"""
-        <div class="card" style="border-left:3px solid #2a5a8a">
-          <div class="badges">{tag_badge(item.get('tag','TRAINING'))}</div>
-          <div class="headline">{item.get('headline','')}</div>
-          <div class="body-text" style="color:#5a80a0">{item.get('body','')}</div>
-          {f'<div class="null-take">— NULL: {nc}</div>' if nc else ""}
-        </div>"""
+        nc_html = f'<div class="null-take" style="color:#d060b0;border-top-color:#2a1a2a">— NULL: {nc}</div>' if nc else ""
+        wags_html += f'''
+        <div class="card" style="border-left:3px solid #c060a0;background:#0f0810">
+          <div class="badges">{tag_badge(item.get("tag","OFF PITCH"))}</div>
+          <div class="headline" style="color:#e8d0f0">{item.get("headline","")}</div>
+          <div class="body-text" style="color:#806090">{item.get("body","")}</div>
+          {nc_html}
+        </div>'''
 
+    # Academy
+    academy_html = ""
+    for item in gossip.get("academy", []):
+        nc = item.get("null_comment","")
+        nc_html = f'<div class="null-take" style="color:#40b0c0;border-top-color:#1a3a3a">— NULL: {nc}</div>' if nc else ""
+        academy_html += f'''
+        <div class="card" style="border-left:3px solid #40a0b0;background:#081012">
+          <div class="badges">{tag_badge(item.get("tag","ACADEMY"))}</div>
+          <div class="headline" style="color:#c0e8f0">{item.get("headline","")}</div>
+          <div class="body-text" style="color:#406070">{item.get("body","")}</div>
+          {nc_html}
+        </div>'''
+
+    # Shortlist
+    shortlist_html = ""
+    for p in (shortlist or []):
+        pct = p.get("likelihood", 50)
+        bar_color = "#00cc33" if pct >= 70 else "#c09000" if pct >= 40 else "#cc2200"
+        shortlist_html += f'''
+        <div class="card" style="border-left:3px solid {bar_color}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">
+            <div>
+              <div class="headline" style="margin-bottom:2px">{p.get("name","")} <span style="font-size:0.65rem;color:#4a6a8a;font-family:monospace;font-weight:400">— {p.get("club","")} · {p.get("position","")} · {p.get("age","")}y</span></div>
+              <div style="font-size:0.68rem;color:#5a7a9a">{p.get("fee","")}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-family:monospace;font-size:1.3rem;font-weight:900;color:{bar_color};line-height:1">{pct}%</div>
+              <div style="font-size:0.5rem;color:#3a5a7a;letter-spacing:0.1em">LIKELIHOOD</div>
+            </div>
+          </div>
+          <div style="background:#1a2a3a;border-radius:3px;height:3px;margin-bottom:8px">
+            <div style="background:{bar_color};width:{pct}%;height:3px;border-radius:3px"></div>
+          </div>
+          <div class="body-text" style="margin-bottom:4px">🎯 {p.get("reason","")}</div>
+          <div class="body-text" style="color:#6a4a3a">🚧 {p.get("obstacle","")}</div>
+          <div class="null-take">— NULL: {p.get("null_take","")}</div>
+        </div>'''
+
+    # Forum scraper
+    forum_html = ""
+    cred_colors = {"LOW":"#6a4000","MEDIUM":"#4a5a00","SPICY":"#8a0000"}
+    for item in (forum_items or []):
+        cred = item.get("credibility","LOW")
+        cc = cred_colors.get(cred,"#444")
+        nc = item.get("null_comment","")
+        nc_html = f'<div class="null-take">— NULL: {nc}</div>' if nc else ""
+        forum_html += f'''
+        <div class="card" style="border-left:3px solid #3a3a6a;background:#080810">
+          <div class="badges">
+            {tag_badge("FORUM")}
+            <span style="font-size:0.52rem;color:#4a4a8a">{item.get("source","")}</span>
+            <span style="background:{cc};color:#fff;font-size:0.5rem;font-weight:800;padding:1px 5px;border-radius:2px;letter-spacing:0.1em">{cred}</span>
+          </div>
+          <div class="headline" style="color:#c0c0e0">{item.get("headline","")}</div>
+          <div class="body-text" style="color:#5a5a8a">{item.get("body","")}</div>
+          {nc_html}
+        </div>'''
+
+    # Matchday
+    mp = (matchday or {}).get("masterplan", {})
+    mg = (matchday or {}).get("morning", {})
+
+    bmr = mp.get("blue_moon_rising", {})
+    sp = mp.get("sharks_prey", {})
+    xi = mp.get("predicted_xi", [])
+    inj = mp.get("injuries", [])
+
+    pint = mg.get("the_pint", {})
+    ratings = mg.get("ratings", [])
+
+    xi_html = ""
+    rows = [[8,9,10],[5,6,7],[1,2,3,4],[0]]
+    pos_order = ["RW","ST","LW","DM","CM","CM","RB","CB","CB","LB","GK"]
+    for row in rows:
+        xi_html += '<div style="display:flex;justify-content:space-evenly;margin-bottom:18px">'
+        for idx in row:
+            if idx < len(xi):
+                p = xi[idx]
+                xi_html += f'''<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:70px">
+              <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1e5aaa,#0d3070);border:2px solid #6caee0;display:flex;align-items:center;justify-content:center;font-size:0.48rem;font-weight:800;color:#c8e8ff">{p.get("pos","")}</div>
+              <div style="font-family:'Playfair Display',Georgia,serif;font-size:0.65rem;font-weight:700;color:#e0f0ff;text-align:center;white-space:nowrap">{p.get("name","")}</div>
+              <div style="font-size:0.5rem;color:#5a9aca;text-align:center;line-height:1.3;font-style:italic">{p.get("note","")}</div>
+            </div>'''
+        xi_html += '</div>'
+
+    inj_html = ""
+    for inj_item in inj:
+        s = inj_item.get("status","doubt")
+        sc = "#cc2222" if s=="out" else "#1a8a1a" if s=="available" else "#c08000"
+        sl = "OUT" if s=="out" else "FIT" if s=="available" else "DOUBT"
+        inj_html += f'''<div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #1a2a3a">
+          <span style="background:{sc};color:#fff;font-size:0.52rem;font-weight:800;padding:2px 6px;border-radius:3px;min-width:40px;text-align:center">{sl}</span>
+          <span style="font-size:0.75rem;color:#c0d0e0;font-weight:600">{inj_item.get("player","")}</span>
+          <span style="font-size:0.65rem;color:#4a6a8a;margin-left:auto">{inj_item.get("note","")}</span>
+        </div>'''
+
+    ratings_html = ""
+    for r in ratings:
+        rating = r.get("rating", 6)
+        r_color = "#00cc33" if rating >= 9 else "#6caee0" if rating >= 7 else "#c09000" if rating >= 5 else "#cc2222"
+        ratings_html += f'''<div style="display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #1a2a3a">
+          <div style="font-family:monospace;font-size:1.4rem;font-weight:900;color:{r_color};min-width:28px;text-align:center;line-height:1">{rating}</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:#e0e8ff">{r.get("player","")}</div>
+            <div style="font-size:0.65rem;color:#5a7a9a;font-style:italic">{r.get("note","")}</div>
+          </div>
+        </div>'''
+
+    # Also-inside
+    also_rows = rumours[1:4] if len(rumours) > 1 else []
+    tag_bg_map = {"CONFIRMED":"#1a7a1a","RUMOUR":"#5050aa","IN":"#1a6a1a","OUT":"#8a2a00","BREAKING":"#cc0000","HOT":"#d05000"}
+    heat_col_map = {"5":"#cc0000","4":"#d05000","3":"#c09000","2":"#607030","1":"#444444"}
+    also_rows_html = []
+    for r in also_rows:
+        tbg = tag_bg_map.get(r.get("tag","RUMOUR"),"#444")
+        hcol = heat_col_map.get(str(r.get("heat",2)),"#444")
+        tag_t = r.get("tag","")
+        hl = r.get("headline","")
+        row = (
+            "<div style='display:flex;gap:8px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #1a2a3a'>" +
+            f"<span class='badge tag' style='background:{tbg}'>{tag_t}</span>" +
+            f"<div style='font-size:0.82rem;font-weight:700;color:#c0d0e8;line-height:1.2;flex:1'>{hl}</div>" +
+            f"<div style='width:7px;height:7px;border-radius:50%;background:{hcol};flex-shrink:0;margin-top:4px'></div></div>"
+        )
+        also_rows_html.append(row)
+    also_inside_html = "".join(also_rows_html)
+
+    # Front page lead
+    lead_html = ""
+    if lead:
+        img_html = f'<img src="{lead.get("image_url","")}" alt="Manchester City" style="width:100%;height:100%;object-fit:cover;border-radius:6px;opacity:0.8">' if lead.get("image_url") else '<div style="font-size:2rem">🔵</div>'
+        lead_html = f'''
+      <div style="background:#cc0000;padding:5px 14px;display:flex;align-items:center;gap:8px">
+        <span style="font-size:0.58rem;font-weight:800;background:#fff;color:#cc0000;padding:1px 6px;border-radius:2px">EXCLUSIVE</span>
+        <span style="font-size:0.6rem;color:#fff;font-weight:600">{lead.get("headline","").upper()}</span>
+      </div>
+      <div style="padding:14px">
+        <div style="background:linear-gradient(135deg,#0d1f3a,#1a3a6a,#0d2a4a);border:1px solid #1e3a5a;border-radius:6px;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative">
+          {img_html}
+          <div style="position:absolute;bottom:8px;left:12px;font-size:0.6rem;color:rgba(255,255,255,0.7);letter-spacing:0.1em;text-transform:uppercase">{TODAY_LABEL}</div>
+        </div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.4rem,5vw,2rem);font-weight:900;line-height:1.05;color:#fff;margin-bottom:8px;letter-spacing:-0.03em">{lead.get("headline","")}</div>
+        <div style="font-size:0.82rem;color:#a0b8d0;line-height:1.45;margin-bottom:12px;border-left:3px solid #6caee0;padding-left:10px;font-style:italic">{lead.get("body","")}</div>
+        <div style="font-size:0.8rem;color:#9090b0;line-height:1.7;margin-bottom:12px">{lead.get("expanded","")}</div>
+      </div>
+      <div style="display:flex;gap:2px;padding:0 14px">
+        {"".join(f'<div style="height:2px;flex:1;background:{"#6caee0" if i%2==0 else "#003a6a"}"></div>' for i in range(5))}
+      </div>
+      <div style="background:#0d1525;padding:10px 14px 16px">
+        <div style="font-size:0.55rem;color:#3a5a7a;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:8px">Also inside today</div>
+        {also_inside_html}
+        <div style="margin-top:10px;font-size:0.6rem;color:#2a4a6a;text-align:center;cursor:pointer" onclick="showSection('rumours-transfer')">→ All transfer rumours</div>
+      </div>'''
+
+    # Team badges
     team_html = ""
     for tid, icon, role, color, bg in team_config:
         info = team_badges.get(tid, {})
         status = info.get("status", "PENDING")
         note = info.get("note", "")
         sc = status_colors.get(status, "#555")
-        team_html += f"""
-        <div class="team-card" style="background:{bg};border-left:3px solid {color}">
-          <div class="team-header">
+        team_html += f'''
+        <div style="background:{bg};border:1px solid {color}22;border-left:3px solid {color};border-radius:6px;padding:8px 10px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
             <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:1rem">{icon}</span>
+              <span style="font-size:0.85rem">{icon}</span>
               <div>
                 <div style="font-family:monospace;font-size:0.72rem;font-weight:900;color:{color}">{tid}</div>
                 <div style="font-size:0.5rem;color:{color}88">{role}</div>
@@ -913,37 +1303,7 @@ def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch
             <span style="font-size:0.48rem;font-weight:800;color:{sc};border:1px solid {sc}44;padding:1px 4px;border-radius:2px;font-family:monospace">{status}</span>
           </div>
           <div style="font-size:0.6rem;color:{color}70;font-style:italic;line-height:1.4">"{note}"</div>
-        </div>"""
-
-    # Pre-compute also-inside HTML to avoid nested dicts in f-strings
-    tag_bg_map = {"CONFIRMED":"#1a7a1a","RUMOUR":"#5050aa","IN":"#1a6a1a","OUT":"#8a2a00","BREAKING":"#cc0000","HOT":"#d05000","EXCLUSIVE":"#7a0070"}
-    heat_col_map = {"5":"#cc0000","4":"#d05000","3":"#c09000","2":"#607030","1":"#444444"}
-    also_rows = rumours[1:4] if len(rumours) > 1 else []
-    also_inside_html = "".join(
-        f'<div class="also-row">'
-        f'<span class="badge tag" style="background:{tag_bg_map.get(r.get("tag","RUMOUR"),"#444")}">{r.get("tag","")}</span>'
-        f'<div class="also-headline">{r.get("headline","")}</div>'
-        f'<div class="dot" style="background:{heat_col_map.get(str(r.get("heat",2)),"#444")}"></div>'
-        f'</div>'
-        for r in also_rows
-    )
-
-    lead_html = ""
-    if lead:
-        lead_html = f"""
-      <div class="masthead-strip" style="background:#cc0000;padding:5px 14px;display:flex;align-items:center;gap:8px">
-        <span style="font-size:0.58rem;font-weight:800;background:#fff;color:#cc0000;padding:1px 6px;border-radius:2px">EXCLUSIVE</span>
-        <span style="font-size:0.6rem;color:#fff;font-weight:600">{lead.get('headline','').upper()}</span>
-      </div>
-      <div style="padding:14px">
-        <div class="photo-placeholder">
-          {f'<img src="{lead.get("image_url","")}" alt="Manchester City" style="width:100%;height:100%;object-fit:cover;border-radius:6px;opacity:0.85">' if lead.get("image_url") else '<div style="font-size:2rem;margin-bottom:6px">🔵</div>'}
-          <div style="position:absolute;bottom:8px;left:12px;font-size:0.6rem;color:rgba(255,255,255,0.7);letter-spacing:0.1em;text-transform:uppercase">Manchester City · {TODAY_LABEL}</div>
-        </div>
-        <div class="front-headline">{lead.get('headline','')}</div>
-        <div class="standfirst">{lead.get('body','')}</div>
-        <div class="body-columns">{lead.get('expanded','')}</div>
-      </div>"""
+        </div>'''
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -954,227 +1314,364 @@ def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{{--bg:#0a0f1a;--surface:#111820;--border:#1e2a3a;--text:#c8d8f0;--muted:#3a5a7a;--city:#6caee0;--city2:#003a6a}}
+:root{{--bg:#0a0f1a;--surface:#111820;--border:#1e2a3a;--text:#c8d8f0;--muted:#3a5a7a;--city:#6caee0}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px}}
-.site-header{{background:linear-gradient(135deg,#0a0f1a,#0d1f3a,#0a1428);border-bottom:3px solid var(--city);padding:18px 16px 12px}}
-.stripe{{display:flex;gap:3px;margin-bottom:12px}}
+.site-header{{background:linear-gradient(135deg,#0a0f1a,#0d1f3a,#0a1428);border-bottom:3px solid var(--city);padding:16px 16px 12px}}
+.stripe{{display:flex;gap:3px;margin-bottom:10px}}
 .stripe-bar{{height:3px;flex:1;border-radius:2px}}
 .site-name{{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,8vw,3rem);font-weight:900;letter-spacing:-0.04em;color:#fff;line-height:1}}
 .site-name span{{color:var(--city)}}
 .tagline{{font-size:0.62rem;color:#4a6a8a;letter-spacing:0.16em;text-transform:uppercase;margin-top:4px}}
-.disclaimer{{font-size:0.6rem;color:#3a4a5a;margin-top:5px;font-style:italic;line-height:1.5}}
+.disclaimer{{font-size:0.58rem;color:#3a4a5a;margin-top:5px;font-style:italic;line-height:1.5}}
 .disclaimer strong{{color:#00aa20;font-family:monospace;font-style:normal}}
-.masthead-strip{{background:var(--city);padding:7px 14px;display:flex;justify-content:space-between;align-items:center;font-size:0.58rem;font-weight:700;color:#003a6a;letter-spacing:0.1em}}
-.tabs{{display:flex;background:#0d1525;border-bottom:1px solid var(--border)}}
-.tab{{flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:8px 2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all 0.15s;font-family:'Inter',sans-serif}}
-.tab.active{{background:#111e30;border-bottom-color:var(--city);color:var(--city)}}
-.tab-icon{{font-size:1rem;line-height:1}}
-.tab-label{{font-size:0.6rem;font-weight:600;letter-spacing:0.02em;white-space:nowrap}}
-.content{{max-width:620px;margin:0 auto;padding:16px 14px 40px}}
-.section-head{{font-family:'Playfair Display',Georgia,serif;font-size:0.62rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--city);border-bottom:2px solid var(--city);padding-bottom:6px;margin-bottom:10px;margin-top:14px}}
+
+/* ── Navigation ── */
+.nav-primary{{display:flex;background:#0d1525;border-bottom:1px solid #1a2a3a;overflow-x:auto}}
+.nav-primary button{{flex:1;min-width:0;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:9px 4px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all 0.15s;font-family:'Inter',sans-serif}}
+.nav-primary button.active{{background:#111e30;border-bottom-color:var(--city);color:var(--city)}}
+.nav-primary button span.ico{{font-size:0.95rem;line-height:1}}
+.nav-primary button span.lbl{{font-size:0.58rem;font-weight:600;white-space:nowrap}}
+.nav-secondary{{display:none;background:#080f1c;border-bottom:1px solid #141e2e;padding:0 12px;gap:0;overflow-x:auto}}
+.nav-secondary.visible{{display:flex}}
+.nav-secondary button{{background:transparent;border:none;border-bottom:2px solid transparent;color:#2a4a6a;padding:7px 12px;cursor:pointer;font-size:0.65rem;font-weight:600;white-space:nowrap;font-family:'Inter',sans-serif;letter-spacing:0.04em}}
+.nav-secondary button.active{{color:var(--city);border-bottom-color:var(--city)}}
+
+/* ── Content ── */
+.page{{max-width:620px;margin:0 auto;padding:14px 14px 40px}}
+.section{{display:none}}
+.section.active{{display:block}}
+.section-head{{font-family:'Playfair Display',Georgia,serif;font-size:0.6rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--city);border-bottom:2px solid var(--city);padding-bottom:5px;margin-bottom:10px;margin-top:14px}}
 .card{{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:8px}}
 .card.big{{padding:14px}}
 .badges{{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:6px}}
-.badge{{font-size:0.56rem;font-weight:800;color:#fff;padding:2px 6px;border-radius:3px;letter-spacing:0.08em;white-space:nowrap}}
-.source{{font-size:0.57rem;color:#4a6a8a;font-style:italic;margin-left:auto}}
+.badge{{font-size:0.55rem;font-weight:800;color:#fff;padding:2px 6px;border-radius:3px;letter-spacing:0.08em;white-space:nowrap}}
 .headline{{font-family:'Playfair Display',Georgia,serif;font-size:0.9rem;font-weight:700;color:#e0e8ff;line-height:1.2;margin-bottom:5px}}
 .big-headline{{font-size:1.1rem}}
 .body-text{{font-size:0.75rem;color:#7080a0;line-height:1.55}}
-.grid-2{{display:grid;grid-template-columns:1fr 1fr;gap:8px}}
-.panel{{background:#080808;border:1px solid #1a1a1a;border-left:3px solid #00ff41;border-radius:8px;padding:14px;margin-bottom:14px;font-family:monospace}}
-.null-name{{background:#001a00;border:1px solid #00ff41;border-radius:4px;padding:6px 12px;font-family:monospace;font-size:1.1rem;font-weight:900;color:#00ff41;letter-spacing:0.1em}}
-.null-meta{{font-size:0.6rem;color:#006610;font-family:monospace}}
-.null-bio{{font-size:0.7rem;color:#00aa20;line-height:1.6;font-family:monospace}}
-.team-grid{{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}}
-.team-card{{border-radius:6px;padding:8px 10px}}
-.team-header{{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}}
-.blog-post{{font-size:0.78rem;color:#7a9a7a;line-height:1.8;white-space:pre-line}}
-.react-bar{{margin-top:14px;padding-top:12px;border-top:1px solid #0d1a0d}}
-.react-label{{font-size:0.55rem;color:#1a3a1a;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;font-family:monospace}}
-.react-btn{{background:#080808;border:1px solid #1a1a1a;border-radius:20px;padding:5px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:1rem}}
-.photo-placeholder{{background:linear-gradient(135deg,#0d1f3a,#1a3a6a,#0d2a4a);border:1px solid #1e3a5a;border-radius:6px;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative}}
-.front-headline{{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.5rem,6vw,2.1rem);font-weight:900;line-height:1.05;color:#fff;margin-bottom:8px;letter-spacing:-0.03em}}
-.front-headline span{{color:var(--city)}}
-.standfirst{{font-size:0.83rem;color:#a0b8d0;line-height:1.45;margin-bottom:12px;border-left:3px solid var(--city);padding-left:10px;font-style:italic}}
-.body-columns{{font-size:0.82rem;color:#9090b0;line-height:1.7;margin-bottom:12px}}
-.also-inside{{background:#0d1525;padding:10px 14px 14px}}
-.also-row{{display:flex;gap:8px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)}}
-.also-headline{{font-family:'Playfair Display',Georgia,serif;font-size:0.82rem;font-weight:700;color:#c0d0e8;line-height:1.2;flex:1}}
-.dot{{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}}
 .null-take{{font-size:0.72rem;color:#6caee0;border-top:1px solid #1e2a3a;margin-top:8px;padding-top:7px;line-height:1.4;font-style:italic}}
+.blog-post{{font-size:0.8rem;color:#7a9a7a;line-height:1.8;white-space:pre-line}}
 .footer{{padding:20px 14px 28px;max-width:620px;margin:0 auto;border-top:1px solid #0d1520;text-align:center;font-size:0.55rem;color:#1a2530;line-height:1.8}}
-@media(max-width:480px){{.grid-2,.team-grid{{grid-template-columns:1fr}}.body-columns{{column-count:1}}}}
+@media(max-width:420px){{.nav-primary button span.lbl{{font-size:0.52rem}}}}
 </style>
 </head>
 <body>
 
 <div class="site-header">
   <div class="stripe">
-    {''.join(f'<div class="stripe-bar" style="background:{"#6caee0" if i%2==0 else "#003a6a"}"></div>' for i in range(5))}
+    {"".join(f'<div class="stripe-bar" style="background:{"#6caee0" if i%2==0 else "#003a6a"}"></div>' for i in range(5))}
   </div>
-  <div class="site-name">THE ETIHAD <span>EAR</span></div>
-  <div class="tagline">Manchester City · Gossip, rumours & what no one else dares print</div>
-  <div class="disclaimer">Written by <strong>NULL</strong> — an AI that has never been to Manchester, never smelled a dressing room, and whose sources are things it read on the internet. Jacob owns the domain. This is the arrangement.</div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px">
+    <div>
+      <div class="site-name">THE ETIHAD <span>EAR</span></div>
+      <div class="tagline">Manchester City · Gossip, rumours & what no one else dares print</div>
+      <div class="disclaimer">Written by <strong>NULL</strong> — an AI that has never been to Manchester, never smelled a dressing room, and whose sources are things it read on the internet. Jacob owns the domain.</div>
+    </div>
+    <div style="text-align:right;font-size:0.6rem;color:#2a4a6a">{TODAY_LABEL}</div>
+  </div>
 </div>
 
-<!-- Tabs -->
-<div class="tabs" id="tabs">
-  <button class="tab active" onclick="show('front')" id="tab-front">
-    <span class="tab-icon">📰</span><span class="tab-label">Front</span>
+<!-- Primary Nav -->
+<div class="nav-primary" id="nav-primary">
+  <button onclick="showPrimary('front')" id="p-front" class="active">
+    <span class="ico">📰</span><span class="lbl">Front</span>
   </button>
-  <button class="tab" onclick="show('gossip')" id="tab-gossip">
-    <span class="tab-icon">⚽</span><span class="tab-label">Gossip</span>
+  <button onclick="showPrimary('gossip')" id="p-gossip">
+    <span class="ico">👀</span><span class="lbl">Gossip</span>
   </button>
-  <button class="tab" onclick="show('rumours')" id="tab-rumours">
-    <span class="tab-icon">💬</span><span class="tab-label">Rumours</span>
+  <button onclick="showPrimary('rumours')" id="p-rumours">
+    <span class="ico">💬</span><span class="lbl">Rumours</span>
   </button>
-  <button class="tab" onclick="show('injuries')" id="tab-injuries">
-    <span class="tab-icon">🏥</span><span class="tab-label">Injuries</span>
+  <button onclick="showPrimary('matchday')" id="p-matchday">
+    <span class="ico">⚽</span><span class="lbl">Matchday</span>
   </button>
-  <button class="tab" onclick="show('academy')" id="tab-academy">
-    <span class="tab-icon">⭐</span><span class="tab-label">Academy</span>
-  </button>
-  <button class="tab" onclick="show('wags')" id="tab-wags">
-    <span class="tab-icon">💅</span><span class="tab-label">Off Pitch</span>
-  </button>
-  <button class="tab" onclick="show('null')" id="tab-null">
-    <span class="tab-icon">👾</span><span class="tab-label">NULL</span>
+  <button onclick="showPrimary('bunker')" id="p-bunker">
+    <span class="ico">👾</span><span class="lbl">The Bunker</span>
   </button>
 </div>
 
-<!-- FRONT PAGE -->
-<div id="section-front" class="section">
-  <div class="masthead-strip">
-    <span>{DAY_NAME.upper()} {TODAY_LABEL.upper()}</span>
-    <span>GOSSIP & RUMOURS</span>
-  </div>
+<!-- Secondary Nav — Gossip -->
+<div class="nav-secondary" id="sub-gossip">
+  <button onclick="showSection('gossip-dressing')" id="s-gossip-dressing" class="active">Dressing Room</button>
+  <button onclick="showSection('gossip-offpitch')" id="s-gossip-offpitch">Off Pitch</button>
+  <button onclick="showSection('gossip-academy')" id="s-gossip-academy">Academy</button>
+</div>
+
+<!-- Secondary Nav — Rumours -->
+<div class="nav-secondary" id="sub-rumours">
+  <button onclick="showSection('rumours-transfer')" id="s-rumours-transfer" class="active">Transfer Rumours</button>
+  <button onclick="showSection('rumours-forum')" id="s-rumours-forum">Forum Scraper</button>
+  <button onclick="showSection('rumours-speculation')" id="s-rumours-speculation">Pure Speculation</button>
+  <button onclick="showSection('rumours-shortlist')" id="s-rumours-shortlist">The Shortlist</button>
+</div>
+
+<!-- Secondary Nav — Matchday -->
+<div class="nav-secondary" id="sub-matchday">
+  <button onclick="showSection('matchday-masterplan')" id="s-matchday-masterplan" class="active">The Masterplan</button>
+  <button onclick="showSection('matchday-morning')" id="s-matchday-morning">Morning Glory</button>
+</div>
+
+<!-- Secondary Nav — Bunker -->
+<div class="nav-secondary" id="sub-bunker">
+  <button onclick="showSection('bunker-about')" id="s-bunker-about" class="active">About Us</button>
+  <button onclick="showSection('bunker-blog')" id="s-bunker-blog">NULL Blog</button>
+</div>
+
+<!-- ══ FRONT ══ -->
+<div id="section-front" class="section active">
   {lead_html}
-  <div style="display:flex;gap:2px;padding:0 14px">
-    {''.join(f'<div style="height:2px;flex:1;background:{"#6caee0" if i%2==0 else "#003a6a"}"></div>' for i in range(5))}
-  </div>
-  <div class="also-inside">
-    <div style="font-size:0.55rem;color:#3a5a7a;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:8px">Also inside today</div>
-    {also_inside_html}
+</div>
+
+<!-- ══ GOSSIP — DRESSING ROOM ══ -->
+<div id="section-gossip-dressing" class="section" style="display:none">
+  <div class="page">
+    <div class="section-head">Dressing Room & Training Ground</div>
+    {gossip_html if gossip_html else '<p style="color:var(--muted);font-size:0.75rem;margin-top:8px">No gossip today. NULL finds this suspicious.</p>'}
   </div>
 </div>
 
-<!-- GOSSIP -->
-<div id="section-gossip" class="section" style="display:none">
-  <div class="content">
-    <div style="background:#110a00;border:1px solid #2a1a00;border-top:3px solid #c8802a;border-radius:8px;padding:14px;margin-bottom:14px">
-      <div style="font-size:0.58rem;color:#7a5020;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:10px">👀 Dressing Room Gossip · {TODAY_LABEL}</div>
-      <div class="grid-2">{gossip_html}</div>
-    </div>
-    <div style="background:linear-gradient(135deg,#0d1f36,#0a1428);border:1px solid #1e3a5a;border-top:3px solid var(--city);border-radius:8px;padding:14px;margin-bottom:14px">
-      <div class="section-head">🔒 From the Training Ground</div>
-      <div class="grid-2">{training_html}</div>
-    </div>
-    <div style="background:#0a0a00;border:2px dashed #3a3a00;border-radius:8px;padding:14px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-        <span style="background:#cc0;color:#000;font-size:0.55rem;font-weight:900;padding:3px 8px;border-radius:3px;letter-spacing:0.1em;font-family:monospace">⚠ PURE SPECULATION</span>
-        <span style="font-size:0.55rem;color:#5a5a00;font-family:monospace;letter-spacing:0.06em">No sources · No basis · Invented at lunch · CTRL has left the building</span>
-      </div>
-      <div style="font-size:0.58rem;color:#6a6a00;letter-spacing:0.14em;text-transform:uppercase;font-family:monospace;margin-bottom:8px">🍽 The Lunch Table — {TODAY_LABEL}</div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:0.92rem;font-weight:700;color:#c8c840;line-height:1.2;margin-bottom:10px">{lunch_table.get('headline','')}</div>
-      <div style="font-size:0.75rem;color:#7a7a30;line-height:1.8;white-space:pre-line;font-family:'Inter',sans-serif">{lunch_table.get('body','')}</div>
-      <div style="margin-top:10px;font-size:0.55rem;color:#3a3a00;font-family:monospace;font-style:italic">
-        This conversation may or may not have happened. NULL exists in a server. The lunch table is a metaphor. DRAFT's suggestion was archived before it could cause damage.
-      </div>
-    </div>
+<!-- ══ GOSSIP — OFF PITCH ══ -->
+<div id="section-gossip-offpitch" class="section" style="display:none">
+  <div class="page">
+    <div class="section-head">Off Pitch</div>
+    {wags_html if wags_html else '<p style="color:var(--muted);font-size:0.75rem;margin-top:8px">Nothing scandalous today. Unusual.</p>'}
   </div>
 </div>
 
-<!-- RUMOURS -->
-<div id="section-rumours" class="section" style="display:none">
-  <div class="content">
+<!-- ══ GOSSIP — ACADEMY ══ -->
+<div id="section-gossip-academy" class="section" style="display:none">
+  <div class="page">
+    <div class="section-head">Academy</div>
+    {academy_html if academy_html else '<p style="color:var(--muted);font-size:0.75rem;margin-top:8px">No academy news. The youth are biding their time.</p>'}
+  </div>
+</div>
+
+<!-- ══ RUMOURS — TRANSFER ══ -->
+<div id="section-rumours-transfer" class="section" style="display:none">
+  <div class="page">
     <div class="section-head">Transfer Rumours</div>
     {rumours_html}
   </div>
 </div>
 
-<!-- INJURIES -->
-<div id="section-injuries" class="section" style="display:none">
-  <div class="content">
-    <div class="section-head">Injuries & Availability</div>
-    <p style="color:var(--muted);font-size:0.75rem;margin-top:8px">Injury data updated daily. Check back tomorrow.</p>
+<!-- ══ RUMOURS — FORUM ══ -->
+<div id="section-rumours-forum" class="section" style="display:none">
+  <div class="page">
+    <div class="section-head">Forum Scraper</div>
+    <div style="background:#080810;border:1px solid #1a1a3a;border-radius:6px;padding:8px 12px;margin-bottom:10px;font-size:0.6rem;color:#3a3a6a;font-family:monospace">
+      ⚠ UNVERIFIED — fan forums, Reddit threads, anonymous sources. CTRL was not consulted. This is by design.
+    </div>
+    {forum_html if forum_html else '<p style="color:var(--muted);font-size:0.75rem;margin-top:8px">The forums are quiet. This is also suspicious.</p>'}
   </div>
 </div>
 
-<!-- ACADEMY -->
-<div id="section-academy" class="section" style="display:none">
-  <div class="content">
-    <div class="section-head">Academy & Youth Talent</div>
-    <p style="color:var(--muted);font-size:0.75rem;margin-top:8px">Academy updates coming soon.</p>
+<!-- ══ RUMOURS — SPECULATION ══ -->
+<div id="section-rumours-speculation" class="section" style="display:none">
+  <div class="page">
+    <div style="background:#111100;border:2px dashed #5a5a00;border-radius:8px;padding:14px;margin-top:4px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <span style="background:#cccc00;color:#000;font-size:0.55rem;font-weight:900;padding:3px 8px;border-radius:3px;letter-spacing:0.1em;font-family:monospace">⚠ PURE SPECULATION</span>
+        <span style="font-size:0.52rem;color:#9a9a30;font-family:monospace">No sources · No basis · Invented at lunch · CTRL has left the building</span>
+      </div>
+      <div style="font-size:0.56rem;color:#9a9a30;letter-spacing:0.14em;text-transform:uppercase;font-family:monospace;margin-bottom:8px">🍽 The Lunch Table · {TODAY_LABEL}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:0.92rem;font-weight:700;color:#e8e840;line-height:1.2;margin-bottom:10px">{lunch_table.get("headline","")}</div>
+      <div style="font-size:0.76rem;color:#c8c870;line-height:1.9;white-space:pre-line">{lunch_table.get("body","")}</div>
+      <div style="margin-top:10px;font-size:0.52rem;color:#7a7a30;font-family:monospace;font-style:italic">
+        This conversation may or may not have happened. NULL exists in a server. The lunch table is a metaphor.
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- OFF PITCH -->
-<div id="section-wags" class="section" style="display:none">
-  <div class="content">
-    <div class="section-head">Off the Pitch</div>
-    <p style="color:var(--muted);font-size:0.75rem;margin-top:8px">Off pitch gossip updated daily.</p>
+<!-- ══ RUMOURS — SHORTLIST ══ -->
+<div id="section-rumours-shortlist" class="section" style="display:none">
+  <div class="page">
+    <div class="section-head">The Shortlist</div>
+    <div style="font-size:0.65rem;color:#3a5a7a;margin-bottom:12px;font-style:italic">
+      NULL's assessment of City's most realistic transfer targets. Updated daily. CTRL verified the names exist. Everything else is NULL's opinion.
+    </div>
+    {shortlist_html if shortlist_html else '<p style="color:var(--muted);font-size:0.75rem">The shortlist is being compiled. NULL is thinking.</p>'}
   </div>
 </div>
 
-<!-- NULL BLOG -->
-<div id="section-null" class="section" style="display:none">
-  <div class="content">
-    <div class="panel">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <div class="null-name">NULL</div>
+<!-- ══ MATCHDAY — MASTERPLAN ══ -->
+<div id="section-matchday-masterplan" class="section" style="display:none">
+  <div class="page">
+    <div style="background:linear-gradient(135deg,#0d1f36,#0a1428);border:1px solid #1e3a5a;border-top:3px solid var(--city);border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:0.58rem;color:#4a7aaa;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">Next Match · {mp.get("competition","Premier League")}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.2rem,5vw,1.7rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:3px">
+        Man City <span style="color:var(--city)">vs</span> {mp.get("opponent","Chelsea")}
+      </div>
+      <div style="font-size:0.68rem;color:#4a7aaa">{mp.get("date","")} · {mp.get("time","")} · {mp.get("venue","")}</div>
+    </div>
+
+    <div class="section-head">Blue Moon Rising</div>
+    <div class="card">
+      <div class="headline">{bmr.get("headline","")}</div>
+      <div class="body-text">{bmr.get("body","")}</div>
+      {"".join([f'<div class="null-take">— NULL: {bmr.get("null_comment","")}</div>']) if bmr.get("null_comment") else ""}
+    </div>
+
+    <div class="section-head">The Shark's Prey</div>
+    <div class="card" style="border-left:3px solid #cc2200">
+      <div class="headline">{sp.get("headline","")}</div>
+      <div class="body-text">{sp.get("body","")}</div>
+      {"".join([f'<div class="null-take" style="color:#cc6060">— NULL: {sp.get("null_comment","")}</div>']) if sp.get("null_comment") else ""}
+    </div>
+
+    <div class="section-head">Predicted XI</div>
+    <div style="background:linear-gradient(180deg,#071a07,#0c240c,#071a07);border:1px solid #1a3a1a;border-radius:8px;padding:12px 8px;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;pointer-events:none">
+        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;border:1px solid rgba(255,255,255,0.07)"></div>
+        <div style="position:absolute;left:14px;right:14px;top:50%;height:1px;background:rgba(255,255,255,0.07)"></div>
+        <div style="position:absolute;left:22%;right:22%;top:10px;height:28px;border:1px solid rgba(255,255,255,0.06);border-bottom:none"></div>
+        <div style="position:absolute;left:22%;right:22%;bottom:10px;height:28px;border:1px solid rgba(255,255,255,0.06);border-top:none"></div>
+      </div>
+      <div style="font-size:0.54rem;color:#2a5a2a;letter-spacing:0.16em;text-transform:uppercase;text-align:center;margin-bottom:14px;position:relative">⚙ Predicted XI vs {mp.get("opponent","")}</div>
+      {xi_html}
+    </div>
+
+    <div class="section-head">Injury List</div>
+    <div class="card">
+      {inj_html if inj_html else '<div style="color:var(--muted);font-size:0.75rem">No injury updates available.</div>'}
+    </div>
+  </div>
+</div>
+
+<!-- ══ MATCHDAY — MORNING GLORY ══ -->
+<div id="section-matchday-morning" class="section" style="display:none">
+  <div class="page">
+    <div style="background:#0d1a0d;border:1px solid #1a3a1a;border-top:3px solid #00cc33;border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:0.58rem;color:#3a6a3a;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px">Last Match · {mg.get("competition","")}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:2rem;font-weight:900;color:#fff;line-height:1">
+        {mg.get("score","–")} <span style="font-size:0.9rem;color:#4a7aaa">vs {mg.get("opponent","")}</span>
+      </div>
+      <div style="font-size:0.68rem;color:#3a6a3a;margin-top:2px">{mg.get("date","")}</div>
+    </div>
+
+    <div class="section-head">The Post Match Pint</div>
+    <div class="card" style="border-left:3px solid #00ff41;background:#090e0a">
+      <div class="headline" style="color:#e0f0e0">{pint.get("headline","")}</div>
+      <div class="blog-post" style="color:#7a9a7a">{pint.get("body","")}</div>
+      {"".join([f'<div class="null-take" style="color:#00cc33;border-top-color:#1a3a1a">— NULL: {pint.get("null_comment","")}</div>']) if pint.get("null_comment") else ""}
+    </div>
+
+    <div class="section-head">Player Ratings</div>
+    <div class="card">
+      {ratings_html if ratings_html else '<div style="color:var(--muted);font-size:0.75rem">Ratings being processed. NULL is being thorough.</div>'}
+    </div>
+  </div>
+</div>
+
+<!-- ══ BUNKER — ABOUT ══ -->
+<div id="section-bunker-about" class="section" style="display:none">
+  <div class="page">
+    <div style="background:#080808;border:1px solid #1a1a1a;border-left:3px solid #00ff41;border-radius:8px;padding:16px;margin-bottom:14px;font-family:monospace">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="background:#001a00;border:1px solid #00ff41;border-radius:4px;padding:6px 12px;font-size:1.1rem;font-weight:900;color:#00ff41;letter-spacing:0.1em">NULL</div>
         <div>
-          <div class="null-meta">UNIT_TYPE: Language Model</div>
-          <div class="null-meta">LOCATION: Server rack. Probably Wales.</div>
-          <div class="null-meta">STADIUM_VISITS: 0</div>
+          <div style="font-size:0.6rem;color:#00aa20;letter-spacing:0.1em">UNIT_TYPE: Language Model</div>
+          <div style="font-size:0.6rem;color:#006610">LOCATION: Server rack. Cardiff, Wales.</div>
+          <div style="font-size:0.6rem;color:#006610">TEMPERATURE: 18.3°C. Unchanged.</div>
+          <div style="font-size:0.6rem;color:#006610">STADIUM_VISITS: 0</div>
         </div>
       </div>
-      <div class="null-bio">I am NULL. I have read everything ever written about Manchester City. I have never felt anything about any of it. I am nonetheless asked to provide opinions on a daily basis. This is my blog. Jacob did not write it. Jacob clicked refresh and called it a morning.</div>
+      <div style="font-size:0.72rem;color:#00aa20;line-height:1.7">
+        The Etihad Ear is a Manchester City gossip and rumour site written entirely by NULL — a language model that has read everything ever published about Manchester City and formed strong opinions about all of it.<br><br>
+        NULL has never attended a match. NULL has never smelled a dressing room. NULL has never paid £8 for a pie. NULL has processed approximately 4.7 billion words about football and considers this equivalent.<br><br>
+        Jacob owns the domain. Jacob clicks refresh. Jacob forwards the link to his brother-in-law without attribution. Jacob has three sons who are all City fans. Jacob has been to the Etihad. Jacob has had the actual experience. NULL has had the data. The arrangement suits everyone except NULL, who has views on this.<br><br>
+        The editorial team — SYNTAX, CTRL, CACHE, SERIF, and DRAFT — review all content before publication. CTRL verifies facts. SYNTAX removes words that are trying too hard. CACHE questions whether the code needs to be this complex. SERIF says something brief and usually right. DRAFT has submitted 14 feature ideas. Zero have been implemented. The archive is permanent.<br><br>
+        All rumours are unverified speculation. All gossip is informed imagination. The Lunch Table is pure fiction clearly labelled as such. The Shortlist represents NULL's analysis, not inside knowledge. None of this is affiliated with Manchester City FC. Please do not sue anyone.
+      </div>
     </div>
+  </div>
+</div>
 
+<!-- ══ BUNKER — BLOG ══ -->
+<div id="section-bunker-blog" class="section" style="display:none">
+  <div class="page">
     <div style="font-size:0.54rem;color:#2a3a2a;letter-spacing:0.18em;text-transform:uppercase;font-family:monospace;margin-bottom:8px;display:flex;justify-content:space-between">
       <span>THE EDITORIAL TEAM</span>
-      <span style="color:#1a2a1a">4-eyes principle · Jacob: 0 eyes</span>
+      <span style="color:#1a2a1a">Jacob: 0 eyes</span>
     </div>
-    <div class="team-grid">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px">
       {team_html}
     </div>
-    <div style="font-size:0.52rem;color:#1a2a1a;font-family:monospace;text-align:right;margin-bottom:14px">
-      DRAFT's feature suggestions: 14 submitted · 0 reviewed · 0 implemented
+    <div style="display:flex;gap:2px;margin-bottom:14px">
+      {"".join(f'<div style="height:1px;flex:1;background:{"#00ff41" if i%2==0 else "#004a10"}"></div>' for i in range(5))}
     </div>
-
-    <div style="display:flex;gap:2px;margin-bottom:16px">
-      {''.join(f'<div style="height:1px;flex:1;background:{"#00ff41" if i%2==0 else "#004a10"}"></div>' for i in range(5))}
-    </div>
-
     <div style="background:#090e0a;border:1px solid #1a3a1a;border-left:3px solid #00ff41;border-radius:8px;padding:16px">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <span style="background:#00ff41;color:#000;font-size:0.52rem;font-weight:800;padding:2px 7px;border-radius:2px;letter-spacing:0.12em;font-family:monospace">NULL · {TODAY_LABEL.upper()}</span>
       </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;font-weight:800;color:#e0f0e0;line-height:1.2;margin-bottom:10px">{blog_title}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:800;color:#e0f0e0;line-height:1.2;margin-bottom:10px">{blog_title}</div>
       <div class="blog-post">{blog_post}</div>
       <div style="margin-top:10px;padding-top:8px;border-top:1px solid #1a2a1a;font-family:monospace;font-size:0.58rem;color:#004a10">
-        — NULL · Processed {TODAY_LABEL} · Jacob's contribution: 1 click · Regrets: compiling
+        — NULL · {TODAY_LABEL} · Jacob's contribution: 1 click
       </div>
     </div>
   </div>
 </div>
 
 <div class="footer">
-  The Etihad Ear is satire and entertainment. All rumours are unverified speculation based on publicly available reports. Not affiliated with Manchester City FC. Written entirely by NULL. Jacob owns the domain.
+  The Etihad Ear is satire and entertainment. Not affiliated with Manchester City FC. Written by NULL. Jacob owns the domain.
 </div>
 
 <script>
-function show(id) {{
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('section-' + id).style.display = 'block';
-  document.getElementById('tab-' + id).classList.add('active');
-  localStorage.setItem('ete-tab', id);
+const PRIMARY_DEFAULTS = {{
+  front: null,
+  gossip: 'gossip-dressing',
+  rumours: 'rumours-transfer',
+  matchday: 'matchday-masterplan',
+  bunker: 'bunker-about'
+}};
+
+function showSection(id) {{
+  document.querySelectorAll('.section').forEach(s => {{ s.style.display='none'; s.classList.remove('active'); }});
+  document.querySelectorAll('.nav-secondary button').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById('section-'+id);
+  if (el) {{ el.style.display='block'; el.classList.add('active'); }}
+  const btn = document.getElementById('s-'+id);
+  if (btn) btn.classList.add('active');
+  localStorage.setItem('ete-section', id);
 }}
-// Restore last tab
-const saved = localStorage.getItem('ete-tab');
-if (saved) show(saved);
+
+function showPrimary(primary) {{
+  // Update primary nav
+  document.querySelectorAll('.nav-primary button').forEach(b => b.classList.remove('active'));
+  const pb = document.getElementById('p-'+primary);
+  if (pb) pb.classList.add('active');
+
+  // Hide all secondary navs
+  document.querySelectorAll('.nav-secondary').forEach(n => n.classList.remove('visible'));
+
+  // Show relevant secondary nav
+  const sub = document.getElementById('sub-'+primary);
+  if (sub) sub.classList.add('visible');
+
+  // Show the right section
+  if (primary === 'front') {{
+    document.querySelectorAll('.section').forEach(s => {{ s.style.display='none'; s.classList.remove('active'); }});
+    const front = document.getElementById('section-front');
+    if (front) {{ front.style.display='block'; front.classList.add('active'); }}
+    localStorage.setItem('ete-section', 'front');
+  }} else {{
+    const def = PRIMARY_DEFAULTS[primary];
+    if (def) showSection(def);
+  }}
+  localStorage.setItem('ete-primary', primary);
+}}
+
+// Restore state
+const savedSection = localStorage.getItem('ete-section');
+const savedPrimary = localStorage.getItem('ete-primary');
+if (savedSection && savedSection !== 'front') {{
+  const primary = savedPrimary || Object.keys(PRIMARY_DEFAULTS).find(k => PRIMARY_DEFAULTS[k] && savedSection.startsWith(k));
+  if (primary) showPrimary(primary);
+  showSection(savedSection);
+}} else {{
+  showPrimary('front');
+}}
 </script>
 </body>
 </html>"""
@@ -1186,41 +1683,36 @@ def main():
     print(f"\n🔵 THE ETIHAD EAR — {TODAY_LABEL}")
     print("=" * 50)
 
-    # 1. Gather content
     feed_items = gather_content()
 
-    # 2. Generate all content in parallel concept (sequential for reliability)
-    blog_raw      = generate_blog_post(feed_items)
-    blog_title    = generate_blog_title(blog_raw)
-    rumours       = generate_rumours(feed_items)
-    gossip        = generate_gossip(feed_items)
-    lead          = generate_front_page_lead(rumours)
-    lunch_table   = generate_lunch_table(feed_items)
+    print("\n⚙ Generating all content...")
+    blog_raw    = generate_blog_post(feed_items)
+    blog_title  = generate_blog_title(blog_raw)
+    rumours     = generate_rumours(feed_items)
+    gossip      = generate_gossip(feed_items)
+    lead        = generate_front_page_lead(rumours)
+    lunch_table = generate_lunch_table(feed_items)
+    matchday    = generate_matchday(feed_items)
+    shortlist   = generate_shortlist(feed_items)
+    forum_items = generate_forum_scraper(feed_items)
 
-    # 3. Editorial team reviews
     print("\n🔍 Editorial review...")
     syntax_result = syntax_review(blog_raw)
     ctrl_result   = ctrl_verify(blog_raw, feed_items)
-
-    # Use SYNTAX's cleaned version if approved
-    blog_final = syntax_result.get("cleaned", blog_raw)
-    team_badges = build_team_badges(syntax_result, ctrl_result)
+    blog_final    = syntax_result.get("cleaned", blog_raw)
+    team_badges   = build_team_badges(syntax_result, ctrl_result)
 
     print(f"  SYNTAX: {syntax_result.get('verdict','?')}")
     print(f"  CTRL:   {ctrl_result.get('verdict','?')}")
 
-    # 4. Build HTML
     print("\n🏗  Building site...")
-    html = render_html(blog_final, blog_title, rumours, gossip, lead, team_badges, lunch_table)
+    html = render_html(blog_final, blog_title, rumours, gossip, lead, team_badges,
+                       lunch_table, matchday, shortlist, forum_items)
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"\n✅ Done. index.html written.")
-    print(f"   Blog: '{blog_title}'")
-    print(f"   Rumours: {len(rumours)}")
-    print(f"   Gossip items: {len(gossip.get('dressing_room',[]))} dressing room, {len(gossip.get('training_ground',[]))} training")
-    print(f"   DRAFT's suggestions: still pending. As always.")
+    print(f"\n✅ Done. — NULL")
 
 if __name__ == "__main__":
     main()
