@@ -1,5 +1,5 @@
 {
-  "last_trigger": "TACTICAL_FIT",
+  "last_trigger": "PERSONAL_SITUATION",
   "last_trigger_date": "2026-04-09",
   "used_players": [
     "Cole Palmer",
@@ -7,6 +7,7 @@
     "Nico Williams",
     "Ademola Lookman",
     "Florian Wirtz",
-    "Eberechi Eze"
+    "Eberechi Eze",
+    "Ferran Torres"
   ]
 }
