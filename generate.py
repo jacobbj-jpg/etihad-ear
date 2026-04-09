@@ -393,29 +393,29 @@ THE TEAM:
 # ── Generation functions ───────────────────────────────────────────────────
 
 def generate_blog_post(feed_items):
-    """NULL writes today's blog post."""
+    """NULL writes today's blog post. Short. Sharp. Gervais."""
     print("\n✍ NULL writing blog post...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 
-Here is what happened in the world of Manchester City in the last 24 hours, gathered from across the internet:
-
+Manchester City news from the last 24 hours:
 {format_feed(feed_items)}
 
-Write today's blog post for The Etihad Ear. 
+Write today's NULL blog post for The Etihad Ear.
 
-Rules:
-- 400-600 words. Not more. SYNTAX will cut it if you go over.
-- Lead with the biggest story but don't announce that you're leading with it.
-- Weave in 2-3 items from the feed naturally.
-- Include at least one Jacob reference.
-- Include one self-aware AI/server observation — but only one.
+Rules — READ THESE CAREFULLY:
+- MAX 200 words. Not 250. Not 300. 200. SYNTAX will bin it if longer.
+- 4-6 short paragraphs. Each paragraph is 1-3 sentences maximum.
+- Ricky Gervais voice: state a fact, let it land, then the dry twist. Never explain the joke.
+- Pick ONE main story from the feed. Don't try to cover everything.
+- One Jacob reference. One server/AI observation. That's the quota. Use them wisely.
+- No markdown formatting. No asterisks. No bold. Plain text only.
 - End with: — NULL
-- Return ONLY the blog post. No title. No preamble. Just the text."""
+- Return ONLY the post. No title. No preamble."""
 
     msg = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=1000,
+        max_tokens=500,
         system=NULL_PERSONA,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -478,7 +478,7 @@ Return JSON only: {"flags": ["any unverified claims"], "verdict": "VERIFIED or F
 
 
 def generate_rumours(feed_items):
-    """NULL generates today's transfer rumours."""
+    """NULL generates rumours in 3-part tabloid structure."""
     print("\n💬 NULL generating rumours...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -486,24 +486,30 @@ def generate_rumours(feed_items):
 Feed data:
 {format_feed(feed_items)}
 
-Generate 6-8 transfer rumours for The Etihad Ear. 
+Generate 6-8 transfer rumours for The Etihad Ear.
 
-Return JSON only — no preamble, no markdown:
+CRITICAL — each rumour has THREE parts:
+1. headline: Short, punchy, tabloid. Max 10 words.
+2. body: 1-2 sentences max. The facts. Who, what, why. Source credited at end.
+3. null_comment: 1-2 sentences MAX. NULL reacts in Ricky Gervais voice. Dry. One observation that lands and stops. Never explains itself.
+
+Return JSON only:
 {{
   "rumours": [
     {{
       "heat": 5,
       "tag": "BREAKING",
       "headline": "Short punchy headline",
-      "body": "2-3 sentences. Dry NULL voice. Source included.",
-      "source": "Sky Sports"
+      "body": "The facts in 1-2 sentences. Source: Sky Sports.",
+      "null_comment": "NULL's one dry observation. Full stop."
     }}
   ]
 }}
 
-Heat scale: 5=BREAKING, 4=HOT, 3=WARM, 2=LUKEWARM, 1=COLD
+Heat: 5=BREAKING, 4=HOT, 3=WARM, 2=LUKEWARM, 1=COLD
 Tags: BREAKING, CONFIRMED, RUMOUR, IN, OUT, EXCLUSIVE
-Use real items from the feed where possible. Invent nothing — speculate from real sources only."""
+Use real feed items. Speculate from sources only — invent nothing in the body.
+The null_comment can be more speculative — it's NULL's opinion."""
 
     msg = client.messages.create(
         model="claude-sonnet-4-6",
@@ -520,7 +526,7 @@ Use real items from the feed where possible. Invent nothing — speculate from r
 
 
 def generate_gossip(feed_items):
-    """NULL generates dressing room gossip."""
+    """NULL generates gossip in 3-part tabloid structure."""
     print("\n👀 NULL generating gossip...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -528,27 +534,34 @@ def generate_gossip(feed_items):
 Feed data:
 {format_feed(feed_items)}
 
-Generate 4 dressing room gossip items and 4 training ground rumours for The Etihad Ear.
+Generate 4 dressing room gossip items and 4 training ground rumours.
+
+CRITICAL — each item has THREE parts:
+1. headline: Punchy tabloid headline. Max 10 words.
+2. body: 1-2 sentences. The gossip/rumour. What happened or what's being said.
+3. null_comment: 1-2 sentences MAX. NULL reacts. Ricky Gervais voice. One dry observation. Full stop.
 
 Return JSON only:
 {{
   "dressing_room": [
     {{
       "tag": "DRESSING ROOM",
-      "headline": "Punchy, slightly tabloid",
-      "body": "2-3 sentences. Unofficial. Tone: anthropologist observing strange tribe."
+      "headline": "Punchy headline",
+      "body": "1-2 sentences. The gossip.",
+      "null_comment": "NULL's dry reaction. One observation."
     }}
   ],
   "training_ground": [
     {{
       "tag": "TRAINING",
-      "headline": "Headline",
-      "body": "2-3 sentences. Training ground whispers. Could be true. Probably is."
+      "headline": "Punchy headline",
+      "body": "1-2 sentences. The rumour.",
+      "null_comment": "NULL's dry reaction."
     }}
   ]
 }}
 
-Draw from feed items where relevant. The rest: informed speculation clearly presented as such."""
+Draw from feed where relevant. The rest: informed speculation presented as such."""
 
     msg = client.messages.create(
         model="claude-sonnet-4-6",
@@ -564,19 +577,60 @@ Draw from feed items where relevant. The rest: informed speculation clearly pres
         return {"dressing_room": [], "training_ground": []}
 
 
+def fetch_unsplash_image(query="football stadium"):
+    """
+    Fetch a free image from Unsplash Source API.
+    No API key required for the source URL format.
+    Returns an image URL or None.
+    """
+    try:
+        # Unsplash Source — free, no key needed, returns a random relevant image
+        queries = [
+            "football+stadium+aerial",
+            "soccer+stadium+night",
+            "football+crowd+stadium",
+            "etihad+stadium",
+            "premier+league+football",
+        ]
+        import random
+        q = random.choice(queries)
+        # Use picsum as reliable fallback if Unsplash Source is slow
+        url = f"https://source.unsplash.com/1200x600/?{q}"
+        # Verify it responds
+        resp = requests.head(url, timeout=5, allow_redirects=True)
+        if resp.status_code == 200:
+            return resp.url  # Follow redirect to actual image
+        return f"https://source.unsplash.com/1200x600/?{q}"
+    except:
+        return None
+
+
 def generate_front_page_lead(rumours):
-    """Pick the lead story for the front page."""
+    """Pick the lead story and write a short punchy front page lead."""
     if not rumours:
         return None
     sorted_r = sorted(rumours, key=lambda x: x.get("heat", 0), reverse=True)
     lead = sorted_r[0]
+
     msg = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=400,
+        max_tokens=200,
         system=NULL_PERSONA,
-        messages=[{"role": "user", "content": f"Expand this into a 3-paragraph front page lead story. Keep NULL's voice. End with the source attribution.\n\nHeadline: {lead['headline']}\nBody: {lead['body']}"}]
+        messages=[{"role": "user", "content": f"""Expand this into a front page lead for The Etihad Ear.
+
+Rules:
+- MAX 3 short paragraphs. Each 1-3 sentences.
+- Ricky Gervais voice throughout.
+- No markdown. No asterisks. Plain text only.
+- End with one dry NULL observation.
+
+Headline: {lead['headline']}
+Body: {lead.get('body','')}"""}]
     )
     lead["expanded"] = msg.content[0].text.strip()
+
+    # Fetch image
+    lead["image_url"] = fetch_unsplash_image()
     return lead
 
 
@@ -823,29 +877,35 @@ def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch
         big_class = "big" if big else ""
         big_hl = "big-headline" if big else ""
         hc = heat_colors.get(str(r.get("heat",2)),"#444")
+        null_comment = r.get("null_comment","")
         rumours_html += f"""
         <div class="card rumour-card {big_class}" style="border-left:3px solid {hc}">
-          <div class="badges">{heat_badge(r.get("heat",2))} {tag_badge(r.get("tag","RUMOUR"))} <span class="source">{r.get("source","")}</span></div>
+          <div class="badges">{heat_badge(r.get("heat",2))} {tag_badge(r.get("tag","RUMOUR"))}</div>
           <div class="headline {big_hl}">{r.get("headline","")}</div>
           <div class="body-text">{r.get("body","")}</div>
+          {f'<div class="null-take">— NULL: {null_comment}</div>' if null_comment else ""}
         </div>"""
 
     gossip_html = ""
     for item in gossip.get("dressing_room", []):
+        nc = item.get("null_comment","")
         gossip_html += f"""
         <div class="card" style="border-left:3px solid #8a4a00;background:#0d0800">
           <div class="badges">{tag_badge(item.get('tag','DRESSING ROOM'))}</div>
           <div class="headline" style="color:#f0d8a0">{item.get('headline','')}</div>
           <div class="body-text" style="color:#8a7050">{item.get('body','')}</div>
+          {f'<div class="null-take" style="color:#a08040;border-top-color:#2a1800">— NULL: {nc}</div>' if nc else ""}
         </div>"""
 
     training_html = ""
     for item in gossip.get("training_ground", []):
+        nc = item.get("null_comment","")
         training_html += f"""
         <div class="card" style="border-left:3px solid #2a5a8a">
           <div class="badges">{tag_badge(item.get('tag','TRAINING'))}</div>
           <div class="headline">{item.get('headline','')}</div>
           <div class="body-text" style="color:#5a80a0">{item.get('body','')}</div>
+          {f'<div class="null-take">— NULL: {nc}</div>' if nc else ""}
         </div>"""
 
     team_html = ""
@@ -891,8 +951,8 @@ def render_html(blog_post, blog_title, rumours, gossip, lead, team_badges, lunch
       </div>
       <div style="padding:14px">
         <div class="photo-placeholder">
-          <div style="font-size:2rem;margin-bottom:6px">🔵</div>
-          <div style="font-size:0.6rem;color:#4a7aaa;letter-spacing:0.1em;text-transform:uppercase">Manchester City · {TODAY_LABEL}</div>
+          {f'<img src="{lead.get("image_url","")}" alt="Manchester City" style="width:100%;height:100%;object-fit:cover;border-radius:6px;opacity:0.85">' if lead.get("image_url") else '<div style="font-size:2rem;margin-bottom:6px">🔵</div>'}
+          <div style="position:absolute;bottom:8px;left:12px;font-size:0.6rem;color:rgba(255,255,255,0.7);letter-spacing:0.1em;text-transform:uppercase">Manchester City · {TODAY_LABEL}</div>
         </div>
         <div class="front-headline">{lead.get('headline','')}</div>
         <div class="standfirst">{lead.get('body','')}</div>
@@ -925,7 +985,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 .tab.active{{background:#111e30;border-bottom-color:var(--city);color:var(--city)}}
 .tab-icon{{font-size:1rem;line-height:1}}
 .tab-label{{font-size:0.6rem;font-weight:600;letter-spacing:0.02em;white-space:nowrap}}
-.content{{max-width:860px;margin:0 auto;padding:16px 14px 40px}}
+.content{{max-width:620px;margin:0 auto;padding:16px 14px 40px}}
 .section-head{{font-family:'Playfair Display',Georgia,serif;font-size:0.62rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--city);border-bottom:2px solid var(--city);padding-bottom:6px;margin-bottom:10px;margin-top:14px}}
 .card{{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:8px}}
 .card.big{{padding:14px}}
@@ -947,16 +1007,17 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 .react-bar{{margin-top:14px;padding-top:12px;border-top:1px solid #0d1a0d}}
 .react-label{{font-size:0.55rem;color:#1a3a1a;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;font-family:monospace}}
 .react-btn{{background:#080808;border:1px solid #1a1a1a;border-radius:20px;padding:5px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:1rem}}
-.photo-placeholder{{background:linear-gradient(135deg,#0d1f3a,#1a3a6a,#0d2a4a);border:1px solid #1e3a5a;border-radius:6px;height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:12px}}
+.photo-placeholder{{background:linear-gradient(135deg,#0d1f3a,#1a3a6a,#0d2a4a);border:1px solid #1e3a5a;border-radius:6px;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative}}
 .front-headline{{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.5rem,6vw,2.1rem);font-weight:900;line-height:1.05;color:#fff;margin-bottom:8px;letter-spacing:-0.03em}}
 .front-headline span{{color:var(--city)}}
 .standfirst{{font-size:0.83rem;color:#a0b8d0;line-height:1.45;margin-bottom:12px;border-left:3px solid var(--city);padding-left:10px;font-style:italic}}
-.body-columns{{font-size:0.77rem;color:#7080a0;line-height:1.7;margin-bottom:12px;column-count:2;column-gap:14px}}
+.body-columns{{font-size:0.82rem;color:#9090b0;line-height:1.7;margin-bottom:12px}}
 .also-inside{{background:#0d1525;padding:10px 14px 14px}}
 .also-row{{display:flex;gap:8px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)}}
 .also-headline{{font-family:'Playfair Display',Georgia,serif;font-size:0.82rem;font-weight:700;color:#c0d0e8;line-height:1.2;flex:1}}
 .dot{{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}}
-.footer{{padding:20px 14px 28px;max-width:860px;margin:0 auto;border-top:1px solid #0d1520;text-align:center;font-size:0.55rem;color:#1a2530;line-height:1.8}}
+.null-take{{font-size:0.72rem;color:#6caee0;border-top:1px solid #1e2a3a;margin-top:8px;padding-top:7px;line-height:1.4;font-style:italic}}
+.footer{{padding:20px 14px 28px;max-width:620px;margin:0 auto;border-top:1px solid #0d1520;text-align:center;font-size:0.55rem;color:#1a2530;line-height:1.8}}
 @media(max-width:480px){{.grid-2,.team-grid{{grid-template-columns:1fr}}.body-columns{{column-count:1}}}}
 </style>
 </head>
