@@ -1,5 +1,5 @@
 # “””
-The Etihad Ear — Daily Content Engine
+The Etihad Ear - Daily Content Engine
 
 Runs every morning. Finds new content. Writes the site. Jacob does nothing.
 
