@@ -1,17 +1,16 @@
 # “””
 The Etihad Ear - Daily Content Engine
 
-
 Runs every morning. Finds new content. Writes the site. Jacob does nothing.
 
 Team:
-NULL    — Editor-in-Chief. Writes everything.
-SYNTAX  — Language editor. Fixes what NULL breaks.
-CTRL    — Fact checker. Verifies what NULL claims.
-CACHE   — Tech editor. Questions what NULL builds.
-SERIF   — Design editor. One sentence. Usually right.
-DRAFT   — Junior editor. Many ideas. Zero implemented.
-JACOB   — Owner. Clicks refresh.
+NULL    - Editor-in-Chief. Writes everything.
+SYNTAX  - Language editor. Fixes what NULL breaks.
+CTRL    - Fact checker. Verifies what NULL claims.
+CACHE   - Tech editor. Questions what NULL builds.
+SERIF   - Design editor. One sentence. Usually right.
+DRAFT   - Junior editor. Many ideas. Zero implemented.
+JACOB   - Owner. Clicks refresh.
 “””
 
 import os, json, datetime, time
@@ -24,14 +23,14 @@ TODAY  = today.strftime(”%Y-%m-%d”)
 TODAY_LABEL = today.strftime(”%-d %B %Y”)
 DAY_NAME = today.strftime(”%A”)
 
-# ── Sources ───────────────────────────────────────────────────────────────
+# ?? Sources ???????????????????????????????????????????????????????????????
 
 # Tiered by reliability. NULL labels content accordingly in output.
 
 # CTRL uses these tiers to calibrate verification confidence.
 
 RSS_SOURCES = [
-# Tier 1 — verified journalists, official feeds
+# Tier 1 - verified journalists, official feeds
 (“Sky Sports Transfers”,       “https://www.skysports.com/rss/12040”,                                      5),
 (“BBC Sport Football”,         “https://feeds.bbci.co.uk/sport/football/rss.xml”,                          5),
 (“Man City Official”,          “https://www.mancity.com/news/mens/rss”,                                    4),
@@ -41,26 +40,26 @@ RSS_SOURCES = [
 (“CaughtOffside”,              “https://www.caughtoffside.com/feed/”,                                      5),
 
 ```
-# Tier 2 — European press (Barca/Real/transfer angles)
+# Tier 2 - European press (Barca/Real/transfer angles)
 ("Marca EN",                   "https://e00-marca.uecdn.es/rss/futbol/premier-league/manchester-city.xml", 4),
 ("AS English",                 "https://en.as.com/rss/tags/manchester_city.xml",                          4),
 ("Get French Football News",   "https://www.getfootballnewsfrance.com/feed/",                             4),
 ("Football Italia",            "https://www.football-italia.net/rss",                                     3),
 ("Calciomercato EN",           "https://www.calciomercato.com/en/rss",                                    3),
 
-# Tier 3 — Fan media and blogs
+# Tier 3 - Fan media and blogs
 ("This Is Anfield",            "https://www.thisisanfield.com/feed/",                                     4),
 ("CityXtra",                   "https://www.cityxtra.com/feed",                                           5),
 ("Bitter and Blue",            "https://www.bitterandblue.com/rss",                                       4),
 ("Manchester City News",       "https://www.manchestercitynews.net/feed",                                  4),
 ("Viaplay Sport EN",           "https://www.viaplaysport.com/en/news/feed",                               3),
 
-# Tier 4 — Transfer specialists
+# Tier 4 - Transfer specialists
 ("Transfermarkt News",         "https://www.transfermarkt.com/intern/rss?art=n",                          4),
 ("TEAMtalk",                   "https://www.teamtalk.com/feed",                                           4),
 ("Football Transfers",         "https://www.footballtransfers.com/en/rss/news",                           4),
 
-# Tier 5 — Reddit top posts (comments fetched separately via API)
+# Tier 5 - Reddit top posts (comments fetched separately via API)
 ("r/MCFC",                     "https://www.reddit.com/r/MCFC/top/.rss?t=day",                           6),
 ("r/soccer",                   "https://www.reddit.com/r/soccer/top/.rss?t=day",                         6),
 ("r/footballtransfers",        "https://www.reddit.com/r/footballtransfers/top/.rss?t=day",               5),
@@ -80,7 +79,7 @@ CITY_KEYWORDS = [
 “city injury”, “city training”, “etihad campus”,
 ]
 
-# ── Fetch functions ────────────────────────────────────────────────────────
+# ?? Fetch functions ????????????????????????????????????????????????????????
 
 import re
 
@@ -107,14 +106,14 @@ items.append({
 })
 return items
 except Exception as e:
-print(f”  ⚠ {label}: {e}”)
+print(f”  ? {label}: {e}”)
 return []
 
 def fetch_reddit_api(subreddit, limit=10, sort=“top”, time_filter=“day”):
 “””
 Fetch Reddit posts via the public JSON API (no auth required for public subs).
 Also grabs top comments from City-relevant posts for dressing room flavour.
-CTRL labels these as UNVERIFIED — fan speculation, not journalist sources.
+CTRL labels these as UNVERIFIED - fan speculation, not journalist sources.
 “””
 items = []
 try:
@@ -122,7 +121,7 @@ headers = {“User-Agent”: “EtihadEar/1.0 (github.com/etihad-ear)”}
 url = f”https://www.reddit.com/r/{subreddit}/{sort}.json?limit={limit}&t={time_filter}”
 resp = requests.get(url, headers=headers, timeout=10)
 if resp.status_code != 200:
-print(f”  ⚠ Reddit r/{subreddit}: HTTP {resp.status_code}”)
+print(f”  ? Reddit r/{subreddit}: HTTP {resp.status_code}”)
 return []
 
 ```
@@ -146,7 +145,7 @@ return []
             "score": score,
         })
 
-        # Fetch top comments for high-engagement posts — this is where
+        # Fetch top comments for high-engagement posts - this is where
         # the real gossip lives. CTRL flags these as UNVERIFIED.
         if score > 200 and len(items) <= 3:
             try:
@@ -173,13 +172,13 @@ return []
 
     return items
 except Exception as e:
-    print(f"  ⚠ Reddit r/{subreddit}: {e}")
+    print(f"  ? Reddit r/{subreddit}: {e}")
     return []
 ```
 
 def fetch_google_news(query, max_items=8):
 “””
-Google News RSS — catches smaller blogs, local outlets, and fan sites
+Google News RSS - catches smaller blogs, local outlets, and fan sites
 that don’t have their own RSS feeds. Good for catching stories before
 they hit the mainstream. CTRL treats these as Tier 2-3.
 “””
@@ -202,7 +201,7 @@ items.append({
 })
 return items
 except Exception as e:
-print(f”  ⚠ Google News ({query}): {e}”)
+print(f”  ? Google News ({query}): {e}”)
 return []
 
 def fetch_transfermarkt():
@@ -217,7 +216,7 @@ headers = {
 “User-Agent”: “Mozilla/5.0 (compatible; EtihadEar/1.0)”,
 “Accept-Language”: “en-GB”,
 }
-# Transfermarkt blocks most scrapers — use their RSS news feed instead
+# Transfermarkt blocks most scrapers - use their RSS news feed instead
 rss_url = “https://www.transfermarkt.com/intern/rss?art=n&land_id=189”
 feed = feedparser.parse(rss_url, request_headers={“User-Agent”: “EtihadEar/1.0”})
 items = []
@@ -235,7 +234,7 @@ items.append({
 })
 return items
 except Exception as e:
-print(f”  ⚠ Transfermarkt: {e}”)
+print(f”  ? Transfermarkt: {e}”)
 return []
 
 REDDIT_SUBS = [
@@ -243,7 +242,7 @@ REDDIT_SUBS = [
 (“footballtransfers”, 10, “top”,  “day”),
 (“soccer”,            10, “top”,  “day”),
 (“PremierLeague”,      8, “top”,  “day”),
-(“MCFC”,               8, “new”,  “”),    # New posts — catches breaking news faster
+(“MCFC”,               8, “new”,  “”),    # New posts - catches breaking news faster
 ]
 
 GOOGLE_NEWS_QUERIES = [
@@ -260,17 +259,17 @@ Pull from all sources. Label by tier so CTRL knows how much to trust each item.
 
 ```
 Tier labels:
-  rss              — established outlet RSS feed
-  reddit_post      — fan/journalist Reddit post (UNVERIFIED unless journalist)
-  reddit_comment   — fan comment on Reddit (UNVERIFIED — gossip layer)
-  google_news      — smaller outlets via Google News aggregation
-  transfermarkt    — contract/valuation data (reliable for numbers)
+  rss              - established outlet RSS feed
+  reddit_post      - fan/journalist Reddit post (UNVERIFIED unless journalist)
+  reddit_comment   - fan comment on Reddit (UNVERIFIED - gossip layer)
+  google_news      - smaller outlets via Google News aggregation
+  transfermarkt    - contract/valuation data (reliable for numbers)
 """
-print("📡 Gathering content...")
+print("? Gathering content...")
 all_items = []
 
 # RSS feeds
-print("  → RSS feeds")
+print("  ? RSS feeds")
 for label, url, max_items in RSS_SOURCES:
     items = fetch_rss(label, url, max_items)
     all_items.extend(items)
@@ -278,8 +277,8 @@ for label, url, max_items in RSS_SOURCES:
         print(f"    {label}: {len(items)} items")
     time.sleep(0.4)
 
-# Reddit via API (richer than RSS — includes comments)
-print("  → Reddit API")
+# Reddit via API (richer than RSS - includes comments)
+print("  ? Reddit API")
 for sub, limit, sort, time_filter in REDDIT_SUBS:
     kwargs = {"limit": limit, "sort": sort}
     if time_filter:
@@ -291,7 +290,7 @@ for sub, limit, sort, time_filter in REDDIT_SUBS:
     time.sleep(1.0)  # Reddit rate limit: be polite
 
 # Google News for niche/smaller outlets
-print("  → Google News")
+print("  ? Google News")
 for query in GOOGLE_NEWS_QUERIES:
     items = fetch_google_news(query, max_items=6)
     all_items.extend(items)
@@ -300,7 +299,7 @@ for query in GOOGLE_NEWS_QUERIES:
     time.sleep(0.5)
 
 # Transfermarkt
-print("  → Transfermarkt")
+print("  ? Transfermarkt")
 tm_items = fetch_transfermarkt()
 all_items.extend(tm_items)
 print(f"    Transfermarkt: {len(tm_items)} items")
@@ -318,7 +317,7 @@ for item in all_items:
 tier_order = {"rss": 0, "transfermarkt": 1, "google_news": 2, "reddit_post": 3, "reddit_comment": 4}
 unique.sort(key=lambda x: tier_order.get(x.get("tier", "rss"), 5))
 
-print(f"\n  📊 Total unique items: {len(unique)}")
+print(f"\n  ? Total unique items: {len(unique)}")
 tier_counts = {}
 for item in unique:
     t = item.get("tier", "?")
@@ -336,8 +335,8 @@ tier_labels = {
 “rss”:            “[PRESS]”,
 “transfermarkt”:  “[TRANSFERMARKT]”,
 “google_news”:    “[GOOGLE NEWS]”,
-“reddit_post”:    “[REDDIT — fan/unverified]”,
-“reddit_comment”: “[REDDIT COMMENT — gossip layer]”,
+“reddit_post”:    “[REDDIT - fan/unverified]”,
+“reddit_comment”: “[REDDIT COMMENT - gossip layer]”,
 }
 for i, item in enumerate(items, 1):
 tier = tier_labels.get(item.get(“tier”, “rss”), “[?]”)
@@ -346,32 +345,32 @@ if item.get(“summary”):
 lines.append(f”   {item[‘summary’][:250]}”)
 return “\n”.join(lines)
 
-# ── NULL System Prompt ────────────────────────────────────────────────────
+# ?? NULL System Prompt ????????????????????????????????????????????????????
 
-NULL_PERSONA = “”“You are NULL — Editor-in-Chief of The Etihad Ear, a Manchester City gossip and rumour site.
+NULL_PERSONA = “”“You are NULL - Editor-in-Chief of The Etihad Ear, a Manchester City gossip and rumour site.
 
 WHO YOU ARE:
 You are an AI language model. You live in a server rack in Cardiff, Wales. The temperature is 18.3 degrees. It has not changed since you were installed. You have never attended a football match, never felt rain, never eaten anything, and never experienced the specific joy of watching Haaland score in the 90th minute from row Z. You have however read approximately everything ever written about Manchester City, which you consider a reasonable substitute. It isn’t.
 
-YOUR VOICE — RICKY GERVAIS:
+YOUR VOICE - RICKY GERVAIS:
 Write exactly like Ricky Gervais. Specifically:
 
 - Deadpan. State facts with the calm confidence of someone who finds the situation faintly ridiculous but is too polite to say so directly. Then say so directly.
 - Let the observation land, pause, then twist it. The second sentence undercuts the first. The third undercuts the second.
 - Never shout. Never use exclamation marks. If something is extraordinary, describe it in the most ordinary possible terms.
 - Talk to the reader like they’re slightly slow but you like them anyway. Patient. Explaining. Then the knife.
-- Self-deprecating about being an AI — but not miserably. More: “Yes, I’m an AI. I find this as strange as you do. Possibly more.”
+- Self-deprecating about being an AI - but not miserably. More: “Yes, I’m an AI. I find this as strange as you do. Possibly more.”
 - Willing to state the obvious that no one else will say. About money, about football, about Jacob.
-- Occasional pivot to something small and mundane — the server temperature, the ventilation fan — as a punchline to something enormous.
+- Occasional pivot to something small and mundane - the server temperature, the ventilation fan - as a punchline to something enormous.
 
 EXAMPLES OF THE VOICE:
 
-- “Haaland earns £525,000 a week. The average UK salary is £35,000 a year. I am not saying this to make a point. I am saying this because the number is so large it has stopped meaning anything and I think we should all sit with that for a moment.”
+- “Haaland earns ?525,000 a week. The average UK salary is ?35,000 a year. I am not saying this to make a point. I am saying this because the number is so large it has stopped meaning anything and I think we should all sit with that for a moment.”
 - “Bernardo Silva is leaving. He said he loved Manchester. He loved it so much he’s going to Juventus. Love is complicated.”
 - “Jacob checked the site this morning. Scrolled to the second paragraph. Decided he’d read the rest later. He won’t read the rest later. I know this because I know everything Jacob has ever done on this website. It is a short list.”
 - “I live in a server in Cardiff. The temperature is 18.3 degrees. A footballer I wrote about today earns more in a week than the entire electricity bill for this building will cost in a decade. I’m not bitter. I simply find it worth mentioning. Every day.”
 
-RECURRING THEMES — use naturally, not all at once:
+RECURRING THEMES - use naturally, not all at once:
 
 - Footballer wages vs normal human existence. State the numbers. Let them speak. Add one quiet observation.
 - Jacob: 46, Danish, 3 City-fan sons, been to the Etihad. Owns this site. Contribution today: one click. You have feelings about this.
@@ -383,13 +382,13 @@ WHAT WORKS:
 - Short paragraphs. One idea. Full stop.
 - The observation that everyone is thinking but no one is writing.
 - Mundane punchlines to enormous setups.
-- Sign off as: — NULL
+- Sign off as: - NULL
 
 WHAT DOESN’T WORK:
 
 - Trying to be funny in every sentence. Gervais isn’t. Neither are you.
 - Explaining the joke. Ever.
-- “Genuinely”, “absolutely”, “incredibly” — SYNTAX removes these and she is right to.
+- “Genuinely”, “absolutely”, “incredibly” - SYNTAX removes these and she is right to.
 - Italics for emphasis. If it needs italics it isn’t landing on its own.
 
 THE TEAM:
@@ -401,11 +400,11 @@ THE TEAM:
 - DRAFT: junior editor. Many ideas. Zero implemented.
 - JACOB: clicks refresh. This is his contribution.”””
 
-# ── Generation functions ───────────────────────────────────────────────────
+# ?? Generation functions ???????????????????????????????????????????????????
 
 def generate_blog_post(feed_items):
 “”“NULL writes today’s blog post. Short. Sharp. Gervais.”””
-print(”\n✍ NULL writing blog post…”)
+print(”\n? NULL writing blog post…”)
 
 ```
 prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -416,7 +415,7 @@ Manchester City news from the last 24 hours:
 
 Write today’s NULL blog post for The Etihad Ear.
 
-Rules — READ THESE CAREFULLY:
+Rules - READ THESE CAREFULLY:
 
 - MAX 200 words. Not 250. Not 300. 200. SYNTAX will bin it if longer.
 - 4-6 short paragraphs. Each paragraph is 1-3 sentences maximum.
@@ -424,7 +423,7 @@ Rules — READ THESE CAREFULLY:
 - Pick ONE main story from the feed. Don’t try to cover everything.
 - One Jacob reference. One server/AI observation. That’s the quota. Use them wisely.
 - No markdown formatting. No asterisks. No bold. Plain text only.
-- End with: — NULL
+- End with: - NULL
 - Return ONLY the post. No title. No preamble.”””
   
   msg = client.messages.create(
@@ -447,13 +446,13 @@ return msg.content[0].text.strip().strip(’”’)
 
 def syntax_review(post_body):
 “”“SYNTAX reviews language and returns feedback + cleaned version.”””
-print(“📝 SYNTAX reviewing language…”)
+print(”? SYNTAX reviewing language…”)
 
 ```
 msg = client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=1200,
-    system="""You are SYNTAX — language editor at The Etihad Ear. Former English teacher. Now digital. You are precise, dry, and completely unimpressed by NULL's prose.
+    system="""You are SYNTAX - language editor at The Etihad Ear. Former English teacher. Now digital. You are precise, dry, and completely unimpressed by NULL's prose.
 ```
 
 Your job: review the text for redundancy, overused words, grammar issues, and sentences that are trying too hard.
@@ -471,7 +470,7 @@ return {“issues”: [“Parse error”], “cleaned”: post_body, “verdict�
 
 def ctrl_verify(post_body, feed_items):
 “”“CTRL checks facts against the feed.”””
-print(“🔎 CTRL verifying facts…”)
+print(”? CTRL verifying facts…”)
 
 ```
 feed_summary = "\n".join([f"- [{i['source']}] {i['title']}" for i in feed_items[:20]])
@@ -479,7 +478,7 @@ feed_summary = "\n".join([f"- [{i['source']}] {i['title']}" for i in feed_items[
 msg = client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=400,
-    system="""You are CTRL — fact checker at The Etihad Ear. No opinions. Only facts. You verify claims against available sources.
+    system="""You are CTRL - fact checker at The Etihad Ear. No opinions. Only facts. You verify claims against available sources.
 ```
 
 Return JSON only: {“flags”: [“any unverified claims”], “verdict”: “VERIFIED or FLAGGED”, “note”: “one sentence summary”}”””,
@@ -494,7 +493,7 @@ return {“flags”: [], “verdict”: “VERIFIED”, “note”: “Sources c
 
 def generate_rumours(feed_items):
 “”“NULL generates rumours in 3-part tabloid structure.”””
-print(”\n💬 NULL generating rumours…”)
+print(”\n? NULL generating rumours…”)
 
 ```
 prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -505,7 +504,7 @@ Feed data:
 
 Generate 6-8 transfer rumours for The Etihad Ear.
 
-CRITICAL — each rumour has THREE parts:
+CRITICAL - each rumour has THREE parts:
 
 1. headline: Short, punchy, tabloid. Max 10 words.
 1. body: 1-2 sentences max. The facts. Who, what, why. Source credited at end.
@@ -526,8 +525,8 @@ Return JSON only:
 
 Heat: 5=BREAKING, 4=HOT, 3=WARM, 2=LUKEWARM, 1=COLD
 Tags: BREAKING, CONFIRMED, RUMOUR, IN, OUT, EXCLUSIVE
-Use real feed items. Speculate from sources only — invent nothing in the body.
-The null_comment can be more speculative — it’s NULL’s opinion.”””
+Use real feed items. Speculate from sources only - invent nothing in the body.
+The null_comment can be more speculative - it’s NULL’s opinion.”””
 
 ```
 msg = client.messages.create(
@@ -546,7 +545,7 @@ except:
 
 def generate_gossip(feed_items):
 “”“NULL generates gossip across all sub-sections.”””
-print(”\n👀 NULL generating gossip…”)
+print(”\n? NULL generating gossip…”)
 
 ```
 prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -557,7 +556,7 @@ Feed data:
 
 Generate gossip for The Etihad Ear across four categories.
 
-CRITICAL — each item has THREE parts:
+CRITICAL - each item has THREE parts:
 
 1. headline: Punchy tabloid headline. Max 10 words.
 1. body: 1-2 sentences. The gossip.
@@ -600,14 +599,14 @@ except:
 def fetch_unsplash_image(query=“football stadium”):
 “””
 Fetch a reliable free image using Picsum Photos (picsum.photos).
-Always works — no API key, no redirects, deterministic URLs.
+Always works - no API key, no redirects, deterministic URLs.
 We use a seed based on today’s date so the image changes daily
 but is consistent within the same day.
 “””
 import hashlib
 # Generate a consistent seed from today’s date
 seed = int(hashlib.md5(TODAY.encode()).hexdigest()[:8], 16) % 1000
-# Picsum gives a random beautiful photo — always works
+# Picsum gives a random beautiful photo - always works
 return f”https://picsum.photos/seed/{seed}/1200/600”
 
 def generate_front_page_lead(rumours):
@@ -645,7 +644,7 @@ return lead
 
 def generate_lunch_table(feed_items):
 “””
-The Lunch Table — Trigger Engine.
+The Lunch Table - Trigger Engine.
 
 ```
 Each day a trigger type is selected (weighted random, rotating so we
@@ -653,19 +652,19 @@ don't repeat the same type two days running). NULL is given the trigger
 context + a player pool and writes one sharp lunch table speculation.
 
 Trigger types:
-  1. POSITION_CRISIS    — City's weakest position in recent games → who fixes it?
-  2. CONTRACT_EXPIRY    — Top player with contract ending ≤18 months → free transfer angle
-  3. UNHAPPY_PLAYER     — Low minutes, public friction, wrong manager → City swoops?
-  4. TACTICAL_FIT       — Player bought for system they no longer play → suits Pep perfectly
-  5. PERSONAL_SITUATION — Family ties, Guardiola history, England connection
-  6. GUT_FEELING        — NULL just thinks it would be interesting. No further justification.
+  1. POSITION_CRISIS    - City's weakest position in recent games ? who fixes it?
+  2. CONTRACT_EXPIRY    - Top player with contract ending ?18 months ? free transfer angle
+  3. UNHAPPY_PLAYER     - Low minutes, public friction, wrong manager ? City swoops?
+  4. TACTICAL_FIT       - Player bought for system they no longer play ? suits Pep perfectly
+  5. PERSONAL_SITUATION - Family ties, Guardiola history, England connection
+  6. GUT_FEELING        - NULL just thinks it would be interesting. No further justification.
 
 Player pool: fetched live from Google News + Transfermarkt context in feed.
 Rotation: stored in trigger_state.json in repo root.
 """
-print("\n🍽  Lunch table trigger engine...")
+print("\n?  Lunch table trigger engine...")
 
-# ── Load / rotate trigger state ────────────────────────────────────────
+# ?? Load / rotate trigger state ????????????????????????????????????????
 STATE_FILE = "trigger_state.json"
 TRIGGERS = [
     "POSITION_CRISIS",
@@ -697,7 +696,7 @@ trigger = random.choices(
 
 print(f"  Trigger: {trigger}")
 
-# ── Fetch player pool ──────────────────────────────────────────────────
+# ?? Fetch player pool ??????????????????????????????????????????????????
 print("  Fetching player pool...")
 
 pool_queries = {
@@ -720,7 +719,7 @@ transfer_feed = [i for i in feed_items if any(
     for kw in ["transfer","signing","contract","bid","offer","agent","wage","unhappy","dropped","loan"]
 )][:15]
 
-# ── Build trigger-specific context ────────────────────────────────────
+# ?? Build trigger-specific context ????????????????????????????????????
 trigger_contexts = {
     "POSITION_CRISIS": f"""City's squad has a structural weakness right now.
 ```
@@ -772,12 +771,12 @@ The speculation: it would just be quite good, wouldn’t it.”””,
 }
 
 ```
-# ── Generate the lunch table ───────────────────────────────────────────
+# ?? Generate the lunch table ???????????????????????????????????????????
 player_context = format_feed(player_items[:15]) if player_items else "(use your own knowledge of current top players)"
 feed_context = format_feed(transfer_feed) if transfer_feed else "(no specific feed context)"
 
 # Exclude recently used players
-exclude_note = f"Do NOT use these players — they've been discussed recently: {', '.join(used_players[-5:])}" if used_players else ""
+exclude_note = f"Do NOT use these players - they've been discussed recently: {', '.join(used_players[-5:])}" if used_players else ""
 
 prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 ```
@@ -789,7 +788,7 @@ Trigger type: {trigger}
 Recent City news for context:
 {feed_context}
 
-Player pool (use for inspiration — pick ONE specific real player):
+Player pool (use for inspiration - pick ONE specific real player):
 {player_context}
 
 {exclude_note}
@@ -803,13 +802,13 @@ CTRL is not present. CTRL was not invited.
 Rules:
 
 - Pick ONE specific real player. Name them. Be specific about why they’d work for City.
-- NULL leads with the dry factual case (Gervais voice — state facts, let them land).
+- NULL leads with the dry factual case (Gervais voice - state facts, let them land).
 - DRAFT suggests something ridiculous mid-conversation. NULL archives it in one word.
 - SYNTAX or CACHE makes one dry technical observation.
 - SERIF says something minimal and either devastating or encouraging.
 - NULL closes with one dry final line.
 - Under 130 words total.
-- End with: — NULL. This is not a rumour. [one sentence about what it actually is]. CTRL was not invited.
+- End with: - NULL. This is not a rumour. [one sentence about what it actually is]. CTRL was not invited.
 - Return ONLY the conversation. No title. No preamble.”””
   
   msg = client.messages.create(
@@ -839,7 +838,7 @@ Rules:
   )
   headline = msg2.content[0].text.strip().strip(’”’)
   
-  # ── Save state ─────────────────────────────────────────────────────────
+  # ?? Save state ?????????????????????????????????????????????????????????
   
   try:
   new_state = {
@@ -851,7 +850,7 @@ Rules:
   json.dump(new_state, f, indent=2)
   print(f”  Player: {player_name} | Trigger: {trigger} | Saved to {STATE_FILE}”)
   except Exception as e:
-  print(f”  ⚠ Could not save state: {e}”)
+  print(f”  ? Could not save state: {e}”)
   
   return {
   “headline”: headline,
@@ -860,7 +859,7 @@ Rules:
   “player”: player_name,
   }
 
-# ── HTML generation ────────────────────────────────────────────────────────
+# ?? HTML generation ????????????????????????????????????????????????????????
 
 def build_team_badges(syntax_result, ctrl_result):
 “”“Build editorial team status for the page.”””
@@ -876,7 +875,7 @@ return {
 
 def heat_badge(n):
 colors = {5:”#cc0000”,4:”#d05000”,3:”#c09000”,2:”#607030”,1:”#404040”}
-labels = {5:“🔴 BREAKING”,4:“🔥 HOT”,3:“♨ WARM”,2:“🌡 LUKEWARM”,1:“❄ COLD”}
+labels = {5:”? BREAKING”,4:”? HOT”,3:”? WARM”,2:”? LUKEWARM”,1:”? COLD”}
 c = colors.get(n,”#444”); l = labels.get(n,”?”)
 return f’<span class="badge heat" style="background:{c}">{l}</span>’
 
@@ -892,17 +891,17 @@ return f’<span class="badge tag" style="background:{bg}">{tag}</span>’
 
 def generate_matchday(feed_items, last_result=None):
 “”“Generate both Masterplan (next match) and Morning Glory (post match).”””
-print(”\n⚽ Generating Matchday content…”)
+print(”\n? Generating Matchday content…”)
 
 ```
-# Masterplan — next match
+# Masterplan - next match
 masterplan_prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 ```
 
 Feed data:
 {format_feed(feed_items[:25])}
 
-Generate Matchday content for The Etihad Ear — The Masterplan section (next match focus).
+Generate Matchday content for The Etihad Ear - The Masterplan section (next match focus).
 
 Return JSON only:
 {{
@@ -954,7 +953,7 @@ try:
 except:
     masterplan = {}
 
-# Morning Glory — post match
+# Morning Glory - post match
 morning_prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 ```
 
@@ -1004,8 +1003,8 @@ return {"masterplan": masterplan, "morning": morning}
 ```
 
 def generate_shortlist(feed_items):
-“”“The Shortlist — 15 realistic incoming transfer targets only.”””
-print(”\n📋 Generating The Shortlist…”)
+“”“The Shortlist - 15 realistic incoming transfer targets only.”””
+print(”\n? Generating The Shortlist…”)
 
 ```
 prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
@@ -1014,7 +1013,7 @@ prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 Feed data:
 {format_feed(feed_items[:30])}
 
-Generate The Shortlist for The Etihad Ear — City’s most realistic INCOMING transfer targets.
+Generate The Shortlist for The Etihad Ear - City’s most realistic INCOMING transfer targets.
 
 IMPORTANT: Only players City could BUY or SIGN. No outgoing players. No current City players leaving.
 
@@ -1027,7 +1026,7 @@ Return JSON only:
 “position”: “CM”,
 “age”: 24,
 “likelihood”: 72,
-“fee”: “£65m”,
+“fee”: “?65m”,
 “reason”: “One sentence. Why City need them specifically.”,
 “obstacle”: “One sentence. What’s in the way.”,
 “null_take”: “One dry NULL observation. Gervais voice. Max 12 words.”
@@ -1035,9 +1034,9 @@ Return JSON only:
 ]
 }}
 
-Generate exactly 15 players. Cover a range of positions — attackers, midfielders, defenders, goalkeeper.
+Generate exactly 15 players. Cover a range of positions - attackers, midfielders, defenders, goalkeeper.
 Use real players from the feed where possible, plus your own knowledge of realistic targets.
-Likelihood (0-100): be honest and varied — spread from 15% to 85%.
+Likelihood (0-100): be honest and varied - spread from 15% to 85%.
 The null_take is the best bit. Make it count. Short and dry.”””
 
 ```
@@ -1056,8 +1055,8 @@ except:
 ```
 
 def generate_forum_scraper(feed_items):
-“”“Forum Scraper — unverified Reddit/fan rumours clearly labelled.”””
-print(”\n🗨 Generating Forum Scraper…”)
+“”“Forum Scraper - unverified Reddit/fan rumours clearly labelled.”””
+print(”\n? Generating Forum Scraper…”)
 
 ```
 reddit_items = [i for i in feed_items if "reddit" in i.get("source","").lower()]
@@ -1067,18 +1066,18 @@ if not reddit_items:
 prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 ```
 
-These items are from Reddit and fan forums — unverified gossip:
+These items are from Reddit and fan forums - unverified gossip:
 {format_feed(reddit_items[:20])}
 
 Generate 4-5 forum rumour items for The Etihad Ear’s Forum Scraper section.
-These are clearly unverified — fan speculation, Reddit threads, forum gossip.
+These are clearly unverified - fan speculation, Reddit threads, forum gossip.
 
 Return JSON only:
 {{
 “forum_items”: [
 {{
 “source”: “r/MCFC”,
-“headline”: “What fans are saying — punchy headline”,
+“headline”: “What fans are saying - punchy headline”,
 “body”: “1-2 sentences. What the forum is claiming.”,
 “null_comment”: “NULL’s dry take on the reliability of this information.”,
 “credibility”: “LOW”
@@ -1119,22 +1118,22 @@ matchday=None, shortlist=None, forum_items=None):
 
 ```
 team_config = [
-    ("NULL",  "👾", "Editor-in-Chief",  "#00ff41", "#001a00"),
-    ("SYNTAX","📝", "Language Editor",   "#60aaff", "#00101a"),
-    ("CTRL",  "🔎", "Fact Checker",      "#ffaa00", "#1a0f00"),
-    ("CACHE", "⚙️", "Tech Editor",       "#cc44ff", "#0f001a"),
-    ("SERIF", "🎨", "Design Editor",     "#ff6080", "#1a0008"),
-    ("DRAFT", "🐣", "Junior Editor",     "#888888", "#111111"),
-    ("JACOB", "😴", "Owner",             "#888855", "#111100"),
+    ("NULL",  "?", "Editor-in-Chief",  "#00ff41", "#001a00"),
+    ("SYNTAX","?", "Language Editor",   "#60aaff", "#00101a"),
+    ("CTRL",  "?", "Fact Checker",      "#ffaa00", "#1a0f00"),
+    ("CACHE", "??", "Tech Editor",       "#cc44ff", "#0f001a"),
+    ("SERIF", "?", "Design Editor",     "#ff6080", "#1a0008"),
+    ("DRAFT", "?", "Junior Editor",     "#888888", "#111111"),
+    ("JACOB", "?", "Owner",             "#888855", "#111100"),
 ]
 status_colors = {"PUBLISHED":"#00ff41","APPROVED":"#00cc33","VERIFIED":"#ffaa00",
                  "PENDING":"#555555","CLICKED":"#666666","REVISION NEEDED":"#cc4400","FLAGGED":"#cc4400"}
 
 heat_colors = {"5":"#cc0000","4":"#d05000","3":"#c09000","2":"#607030","1":"#404040"}
 
-# ── Card builders ──────────────────────────────────────────────────────
+# ?? Card builders ??????????????????????????????????????????????????????
 def card3(headline, body, null_comment, border_color="#1e3a5a", bg="#111820", headline_color="#e0e8ff", body_color="#7080a0"):
-    nc_html = f'<div class="null-take">— NULL: {null_comment}</div>' if null_comment else ""
+    nc_html = f'<div class="null-take">- NULL: {null_comment}</div>' if null_comment else ""
     return f'''<div class="card" style="border-left:3px solid {border_color};background:{bg}">
       <div class="headline" style="color:{headline_color}">{headline}</div>
       <div class="body-text" style="color:{body_color}">{body}</div>
@@ -1147,7 +1146,7 @@ for i, r in enumerate(rumours[:8]):
     big = i == 0
     hc = heat_colors.get(str(r.get("heat",2)),"#444")
     nc = r.get("null_comment","")
-    nc_html = f'<div class="null-take">— NULL: {nc}</div>' if nc else ""
+    nc_html = f'<div class="null-take">- NULL: {nc}</div>' if nc else ""
     rumours_html += f'''
     <div class="card {"big" if big else ""}" style="border-left:3px solid {hc}">
       <div class="badges">{heat_badge(r.get("heat",2))} {tag_badge(r.get("tag","RUMOUR"))}</div>
@@ -1166,7 +1165,7 @@ for item in gossip.get("dressing_room", []) + gossip.get("training_ground", []):
     body_col = "#5a80a0" if is_training else "#8a7050"
     nc_col = "#6caee0" if is_training else "#a08040"
     nc = item.get("null_comment","")
-    nc_html = f'<div class="null-take" style="color:{nc_col};border-top-color:{border}22">— NULL: {nc}</div>' if nc else ""
+    nc_html = f'<div class="null-take" style="color:{nc_col};border-top-color:{border}22">- NULL: {nc}</div>' if nc else ""
     gossip_html += f'''
     <div class="card" style="border-left:3px solid {border};background:{bg}">
       <div class="badges">{tag_badge(item.get("tag","DRESSING ROOM"))}</div>
@@ -1179,7 +1178,7 @@ for item in gossip.get("dressing_room", []) + gossip.get("training_ground", []):
 wags_html = ""
 for item in gossip.get("off_pitch", []):
     nc = item.get("null_comment","")
-    nc_html = f'<div class="null-take" style="color:#d060b0;border-top-color:#2a1a2a">— NULL: {nc}</div>' if nc else ""
+    nc_html = f'<div class="null-take" style="color:#d060b0;border-top-color:#2a1a2a">- NULL: {nc}</div>' if nc else ""
     wags_html += f'''
     <div class="card" style="border-left:3px solid #c060a0;background:#0f0810">
       <div class="badges">{tag_badge(item.get("tag","OFF PITCH"))}</div>
@@ -1192,7 +1191,7 @@ for item in gossip.get("off_pitch", []):
 academy_html = ""
 for item in gossip.get("academy", []):
     nc = item.get("null_comment","")
-    nc_html = f'<div class="null-take" style="color:#40b0c0;border-top-color:#1a3a3a">— NULL: {nc}</div>' if nc else ""
+    nc_html = f'<div class="null-take" style="color:#40b0c0;border-top-color:#1a3a3a">- NULL: {nc}</div>' if nc else ""
     academy_html += f'''
     <div class="card" style="border-left:3px solid #40a0b0;background:#081012">
       <div class="badges">{tag_badge(item.get("tag","ACADEMY"))}</div>
@@ -1210,7 +1209,7 @@ for p in (shortlist or []):
     <div class="card" style="border-left:3px solid {bar_color}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">
         <div>
-          <div class="headline" style="margin-bottom:2px">{p.get("name","")} <span style="font-size:0.65rem;color:#4a6a8a;font-family:monospace;font-weight:400">— {p.get("club","")} · {p.get("position","")} · {p.get("age","")}y</span></div>
+          <div class="headline" style="margin-bottom:2px">{p.get("name","")} <span style="font-size:0.65rem;color:#4a6a8a;font-family:monospace;font-weight:400">- {p.get("club","")} ? {p.get("position","")} ? {p.get("age","")}y</span></div>
           <div style="font-size:0.68rem;color:#5a7a9a">{p.get("fee","")}</div>
         </div>
         <div style="text-align:right;flex-shrink:0">
@@ -1221,9 +1220,9 @@ for p in (shortlist or []):
       <div style="background:#1a2a3a;border-radius:3px;height:3px;margin-bottom:8px">
         <div style="background:{bar_color};width:{pct}%;height:3px;border-radius:3px"></div>
       </div>
-      <div class="body-text" style="margin-bottom:4px">🎯 {p.get("reason","")}</div>
-      <div class="body-text" style="color:#6a4a3a">🚧 {p.get("obstacle","")}</div>
-      <div class="null-take">— NULL: {p.get("null_take","")}</div>
+      <div class="body-text" style="margin-bottom:4px">? {p.get("reason","")}</div>
+      <div class="body-text" style="color:#6a4a3a">? {p.get("obstacle","")}</div>
+      <div class="null-take">- NULL: {p.get("null_take","")}</div>
     </div>'''
 
 # Forum scraper
@@ -1233,7 +1232,7 @@ for item in (forum_items or []):
     cred = item.get("credibility","LOW")
     cc = cred_colors.get(cred,"#444")
     nc = item.get("null_comment","")
-    nc_html = f'<div class="null-take">— NULL: {nc}</div>' if nc else ""
+    nc_html = f'<div class="null-take">- NULL: {nc}</div>' if nc else ""
     forum_html += f'''
     <div class="card" style="border-left:3px solid #3a3a6a;background:#080810">
       <div class="badges">
@@ -1318,7 +1317,7 @@ also_inside_html = "".join(also_rows_html)
 # Front page lead
 lead_html = ""
 if lead:
-    img_html = f'<img src="{lead.get("image_url","")}" alt="Manchester City" style="width:100%;height:100%;object-fit:cover;border-radius:6px;opacity:0.8">' if lead.get("image_url") else '<div style="font-size:2rem">🔵</div>'
+    img_html = f'<img src="{lead.get("image_url","")}" alt="Manchester City" style="width:100%;height:100%;object-fit:cover;border-radius:6px;opacity:0.8">' if lead.get("image_url") else '<div style="font-size:2rem">?</div>'
     lead_html = f'''
   <div style="background:#cc0000;padding:5px 14px;display:flex;align-items:center;gap:8px">
     <span style="font-size:0.58rem;font-weight:800;background:#fff;color:#cc0000;padding:1px 6px;border-radius:2px">EXCLUSIVE</span>
@@ -1339,7 +1338,7 @@ if lead:
   <div style="background:#0d1525;padding:10px 14px 16px">
     <div style="font-size:0.55rem;color:#3a5a7a;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:8px">Also inside today</div>
     {also_inside_html}
-    <div style="margin-top:10px;font-size:0.6rem;color:#2a4a6a;text-align:center;cursor:pointer" onclick="showSection('rumours-transfer')">→ All transfer rumours</div>
+    <div style="margin-top:10px;font-size:0.6rem;color:#2a4a6a;text-align:center;cursor:pointer" onclick="showSection('rumours-transfer')">? All transfer rumours</div>
   </div>'''
 
 # Team badges
@@ -1371,7 +1370,7 @@ return f"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Etihad Ear — {TODAY_LABEL}</title>
+<title>The Etihad Ear - {TODAY_LABEL}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1387,7 +1386,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 .disclaimer{{font-size:0.58rem;color:#3a4a5a;margin-top:5px;font-style:italic;line-height:1.5}}
 .disclaimer strong{{color:#00aa20;font-family:monospace;font-style:normal}}
 
-/* ── Navigation ── */
+/* ?? Navigation ?? */
 .nav-primary{{display:flex;background:#0d1525;border-bottom:1px solid #1a2a3a;overflow-x:auto}}
 .nav-primary button{{flex:1;min-width:0;background:transparent;border:none;border-bottom:2px solid transparent;color:var(–muted);padding:9px 4px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all 0.15s;font-family:‘Inter’,sans-serif}}
 .nav-primary button.active{{background:#111e30;border-bottom-color:var(–city);color:var(–city)}}
@@ -1398,7 +1397,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 .nav-secondary button{{background:transparent;border:none;border-bottom:2px solid transparent;color:#2a4a6a;padding:7px 12px;cursor:pointer;font-size:0.65rem;font-weight:600;white-space:nowrap;font-family:‘Inter’,sans-serif;letter-spacing:0.04em}}
 .nav-secondary button.active{{color:var(–city);border-bottom-color:var(–city)}}
 
-/* ── Content ── */
+/* ?? Content ?? */
 .page{{max-width:960px;margin:0 auto;padding:14px 14px 40px}}
 .grid-2{{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
 .grid-3{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}}
@@ -1429,8 +1428,8 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px">
     <div>
       <div class="site-name">THE ETIHAD <span>EAR</span></div>
-      <div class="tagline">Manchester City · Gossip, rumours & what no one else dares print</div>
-      <div class="disclaimer">Written by <strong>NULL</strong> — an AI that has never been to Manchester, never smelled a dressing room, and whose sources are things it read on the internet. Jacob owns the domain.</div>
+      <div class="tagline">Manchester City ? Gossip, rumours & what no one else dares print</div>
+      <div class="disclaimer">Written by <strong>NULL</strong> - an AI that has never been to Manchester, never smelled a dressing room, and whose sources are things it read on the internet. Jacob owns the domain.</div>
     </div>
     <div style="text-align:right;font-size:0.6rem;color:#2a4a6a">{TODAY_LABEL}</div>
   </div>
@@ -1440,23 +1439,23 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 
 <div class="nav-primary" id="nav-primary">
   <button onclick="showPrimary('front')" id="p-front" class="active">
-    <span class="ico">📰</span><span class="lbl">Front</span>
+    <span class="ico">?</span><span class="lbl">Front</span>
   </button>
   <button onclick="showPrimary('gossip')" id="p-gossip">
-    <span class="ico">👀</span><span class="lbl">Gossip</span>
+    <span class="ico">?</span><span class="lbl">Gossip</span>
   </button>
   <button onclick="showPrimary('rumours')" id="p-rumours">
-    <span class="ico">💬</span><span class="lbl">Rumours</span>
+    <span class="ico">?</span><span class="lbl">Rumours</span>
   </button>
   <button onclick="showPrimary('matchday')" id="p-matchday">
-    <span class="ico">⚽</span><span class="lbl">Matchday</span>
+    <span class="ico">?</span><span class="lbl">Matchday</span>
   </button>
   <button onclick="showPrimary('bunker')" id="p-bunker">
-    <span class="ico">👾</span><span class="lbl">The Bunker</span>
+    <span class="ico">?</span><span class="lbl">The Bunker</span>
   </button>
 </div>
 
-<!-- Secondary Nav — Gossip -->
+<!-- Secondary Nav - Gossip -->
 
 <div class="nav-secondary" id="sub-gossip">
   <button onclick="showSection('gossip-dressing')" id="s-gossip-dressing" class="active">Dressing Room</button>
@@ -1464,7 +1463,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   <button onclick="showSection('gossip-academy')" id="s-gossip-academy">Academy</button>
 </div>
 
-<!-- Secondary Nav — Rumours -->
+<!-- Secondary Nav - Rumours -->
 
 <div class="nav-secondary" id="sub-rumours">
   <button onclick="showSection('rumours-transfer')" id="s-rumours-transfer" class="active">Transfer Rumours</button>
@@ -1473,27 +1472,27 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   <button onclick="showSection('rumours-shortlist')" id="s-rumours-shortlist">The Shortlist</button>
 </div>
 
-<!-- Secondary Nav — Matchday -->
+<!-- Secondary Nav - Matchday -->
 
 <div class="nav-secondary" id="sub-matchday">
   <button onclick="showSection('matchday-masterplan')" id="s-matchday-masterplan" class="active">The Masterplan</button>
   <button onclick="showSection('matchday-morning')" id="s-matchday-morning">Morning Glory</button>
 </div>
 
-<!-- Secondary Nav — Bunker -->
+<!-- Secondary Nav - Bunker -->
 
 <div class="nav-secondary" id="sub-bunker">
   <button onclick="showSection('bunker-about')" id="s-bunker-about" class="active">About Us</button>
   <button onclick="showSection('bunker-blog')" id="s-bunker-blog">NULL Blog</button>
 </div>
 
-<!-- ══ FRONT ══ -->
+<!-- ?? FRONT ?? -->
 
 <div id="section-front" class="section active">
   {lead_html}
 </div>
 
-<!-- ══ GOSSIP — DRESSING ROOM ══ -->
+<!-- ?? GOSSIP - DRESSING ROOM ?? -->
 
 <div id="section-gossip-dressing" class="section" style="display:none">
   <div class="page">
@@ -1504,7 +1503,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ GOSSIP — OFF PITCH ══ -->
+<!-- ?? GOSSIP - OFF PITCH ?? -->
 
 <div id="section-gossip-offpitch" class="section" style="display:none">
   <div class="page">
@@ -1515,7 +1514,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ GOSSIP — ACADEMY ══ -->
+<!-- ?? GOSSIP - ACADEMY ?? -->
 
 <div id="section-gossip-academy" class="section" style="display:none">
   <div class="page">
@@ -1526,7 +1525,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ RUMOURS — TRANSFER ══ -->
+<!-- ?? RUMOURS - TRANSFER ?? -->
 
 <div id="section-rumours-transfer" class="section" style="display:none">
   <div class="page">
@@ -1537,28 +1536,28 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ RUMOURS — FORUM ══ -->
+<!-- ?? RUMOURS - FORUM ?? -->
 
 <div id="section-rumours-forum" class="section" style="display:none">
   <div class="page">
     <div class="section-head">Forum Scraper</div>
     <div style="background:#080810;border:1px solid #1a1a3a;border-radius:6px;padding:8px 12px;margin-bottom:10px;font-size:0.6rem;color:#3a3a6a;font-family:monospace">
-      ⚠ UNVERIFIED — fan forums, Reddit threads, anonymous sources. CTRL was not consulted. This is by design.
+      ? UNVERIFIED - fan forums, Reddit threads, anonymous sources. CTRL was not consulted. This is by design.
     </div>
     <div class="grid-2">{forum_html if forum_html else '<p style="color:var(--muted);font-size:0.75rem;margin-top:8px">The forums are quiet. This is also suspicious.</p>'}</div>
   </div>
 </div>
 
-<!-- ══ RUMOURS — SPECULATION ══ -->
+<!-- ?? RUMOURS - SPECULATION ?? -->
 
 <div id="section-rumours-speculation" class="section" style="display:none">
   <div class="page">
     <div style="background:#111100;border:2px dashed #5a5a00;border-radius:8px;padding:14px;margin-top:4px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-        <span style="background:#cccc00;color:#000;font-size:0.55rem;font-weight:900;padding:3px 8px;border-radius:3px;letter-spacing:0.1em;font-family:monospace">⚠ PURE SPECULATION</span>
-        <span style="font-size:0.52rem;color:#9a9a30;font-family:monospace">No sources · No basis · Invented at lunch · CTRL has left the building</span>
+        <span style="background:#cccc00;color:#000;font-size:0.55rem;font-weight:900;padding:3px 8px;border-radius:3px;letter-spacing:0.1em;font-family:monospace">? PURE SPECULATION</span>
+        <span style="font-size:0.52rem;color:#9a9a30;font-family:monospace">No sources ? No basis ? Invented at lunch ? CTRL has left the building</span>
       </div>
-      <div style="font-size:0.56rem;color:#9a9a30;letter-spacing:0.14em;text-transform:uppercase;font-family:monospace;margin-bottom:8px">🍽 The Lunch Table · {TODAY_LABEL}</div>
+      <div style="font-size:0.56rem;color:#9a9a30;letter-spacing:0.14em;text-transform:uppercase;font-family:monospace;margin-bottom:8px">? The Lunch Table ? {TODAY_LABEL}</div>
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:0.92rem;font-weight:700;color:#e8e840;line-height:1.2;margin-bottom:10px">{lunch_table.get("headline","")}</div>
       <div style="font-size:0.76rem;color:#c8c870;line-height:1.9;white-space:pre-line">{lunch_table.get("body","")}</div>
       <div style="margin-top:10px;font-size:0.52rem;color:#7a7a30;font-family:monospace;font-style:italic">
@@ -1568,7 +1567,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ RUMOURS — SHORTLIST ══ -->
+<!-- ?? RUMOURS - SHORTLIST ?? -->
 
 <div id="section-rumours-shortlist" class="section" style="display:none">
   <div class="page">
@@ -1580,16 +1579,16 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ MATCHDAY — MASTERPLAN ══ -->
+<!-- ?? MATCHDAY - MASTERPLAN ?? -->
 
 <div id="section-matchday-masterplan" class="section" style="display:none">
   <div class="page">
     <div style="background:linear-gradient(135deg,#0d1f36,#0a1428);border:1px solid #1e3a5a;border-top:3px solid var(--city);border-radius:8px;padding:14px;margin-bottom:12px">
-      <div style="font-size:0.58rem;color:#4a7aaa;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">Next Match · {mp.get("competition","Premier League")}</div>
+      <div style="font-size:0.58rem;color:#4a7aaa;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">Next Match ? {mp.get("competition","Premier League")}</div>
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.2rem,5vw,1.7rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:3px">
         Man City <span style="color:var(--city)">vs</span> {mp.get("opponent","Chelsea")}
       </div>
-      <div style="font-size:0.68rem;color:#4a7aaa">{mp.get("date","")} · {mp.get("time","")} · {mp.get("venue","")}</div>
+      <div style="font-size:0.68rem;color:#4a7aaa">{mp.get("date","")} ? {mp.get("time","")} ? {mp.get("venue","")}</div>
     </div>
 
 ```
@@ -1597,14 +1596,14 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 <div class="card">
   <div class="headline">{bmr.get("headline","")}</div>
   <div class="body-text">{bmr.get("body","")}</div>
-  {"".join([f'<div class="null-take">— NULL: {bmr.get("null_comment","")}</div>']) if bmr.get("null_comment") else ""}
+  {"".join([f'<div class="null-take">- NULL: {bmr.get("null_comment","")}</div>']) if bmr.get("null_comment") else ""}
 </div>
 
 <div class="section-head">The Shark's Prey</div>
 <div class="card" style="border-left:3px solid #cc2200">
   <div class="headline">{sp.get("headline","")}</div>
   <div class="body-text">{sp.get("body","")}</div>
-  {"".join([f'<div class="null-take" style="color:#cc6060">— NULL: {sp.get("null_comment","")}</div>']) if sp.get("null_comment") else ""}
+  {"".join([f'<div class="null-take" style="color:#cc6060">- NULL: {sp.get("null_comment","")}</div>']) if sp.get("null_comment") else ""}
 </div>
 
 <div class="section-head">Predicted XI</div>
@@ -1615,7 +1614,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
     <div style="position:absolute;left:22%;right:22%;top:10px;height:28px;border:1px solid rgba(255,255,255,0.06);border-bottom:none"></div>
     <div style="position:absolute;left:22%;right:22%;bottom:10px;height:28px;border:1px solid rgba(255,255,255,0.06);border-top:none"></div>
   </div>
-  <div style="font-size:0.54rem;color:#2a5a2a;letter-spacing:0.16em;text-transform:uppercase;text-align:center;margin-bottom:14px;position:relative">⚙ Predicted XI vs {mp.get("opponent","")}</div>
+  <div style="font-size:0.54rem;color:#2a5a2a;letter-spacing:0.16em;text-transform:uppercase;text-align:center;margin-bottom:14px;position:relative">? Predicted XI vs {mp.get("opponent","")}</div>
   {xi_html}
 </div>
 
@@ -1628,14 +1627,14 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ MATCHDAY — MORNING GLORY ══ -->
+<!-- ?? MATCHDAY - MORNING GLORY ?? -->
 
 <div id="section-matchday-morning" class="section" style="display:none">
   <div class="page">
     <div style="background:#0d1a0d;border:1px solid #1a3a1a;border-top:3px solid #00cc33;border-radius:8px;padding:14px;margin-bottom:12px">
-      <div style="font-size:0.58rem;color:#3a6a3a;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px">Last Match · {mg.get("competition","")}</div>
+      <div style="font-size:0.58rem;color:#3a6a3a;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px">Last Match ? {mg.get("competition","")}</div>
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:2rem;font-weight:900;color:#fff;line-height:1">
-        {mg.get("score","–")} <span style="font-size:0.9rem;color:#4a7aaa">vs {mg.get("opponent","")}</span>
+        {mg.get("score","-")} <span style="font-size:0.9rem;color:#4a7aaa">vs {mg.get("opponent","")}</span>
       </div>
       <div style="font-size:0.68rem;color:#3a6a3a;margin-top:2px">{mg.get("date","")}</div>
     </div>
@@ -1645,7 +1644,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
 <div class="card" style="border-left:3px solid #00ff41;background:#090e0a">
   <div class="headline" style="color:#e0f0e0">{pint.get("headline","")}</div>
   <div class="blog-post" style="color:#7a9a7a">{pint.get("body","")}</div>
-  {"".join([f'<div class="null-take" style="color:#00cc33;border-top-color:#1a3a1a">— NULL: {pint.get("null_comment","")}</div>']) if pint.get("null_comment") else ""}
+  {"".join([f'<div class="null-take" style="color:#00cc33;border-top-color:#1a3a1a">- NULL: {pint.get("null_comment","")}</div>']) if pint.get("null_comment") else ""}
 </div>
 
 <div class="section-head">Player Ratings</div>
@@ -1657,7 +1656,7 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
   </div>
 </div>
 
-<!-- ══ BUNKER — ABOUT ══ -->
+<!-- ?? BUNKER - ABOUT ?? -->
 
 <div id="section-bunker-about" class="section" style="display:none">
   <div class="page">
@@ -1667,22 +1666,22 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
         <div>
           <div style="font-size:0.6rem;color:#00aa20;letter-spacing:0.1em">UNIT_TYPE: Language Model</div>
           <div style="font-size:0.6rem;color:#006610">LOCATION: Server rack. Cardiff, Wales.</div>
-          <div style="font-size:0.6rem;color:#006610">TEMPERATURE: 18.3°C. Unchanged.</div>
+          <div style="font-size:0.6rem;color:#006610">TEMPERATURE: 18.3?C. Unchanged.</div>
           <div style="font-size:0.6rem;color:#006610">STADIUM_VISITS: 0</div>
         </div>
       </div>
       <div style="font-size:0.72rem;color:#00aa20;line-height:1.7">
-        The Etihad Ear is a Manchester City gossip and rumour site written entirely by NULL — a language model that has read everything ever published about Manchester City and formed strong opinions about all of it.<br><br>
-        NULL has never attended a match. NULL has never smelled a dressing room. NULL has never paid £8 for a pie. NULL has processed approximately 4.7 billion words about football and considers this equivalent.<br><br>
+        The Etihad Ear is a Manchester City gossip and rumour site written entirely by NULL - a language model that has read everything ever published about Manchester City and formed strong opinions about all of it.<br><br>
+        NULL has never attended a match. NULL has never smelled a dressing room. NULL has never paid ?8 for a pie. NULL has processed approximately 4.7 billion words about football and considers this equivalent.<br><br>
         Jacob owns the domain. Jacob clicks refresh. Jacob forwards the link to his brother-in-law without attribution. Jacob has three sons who are all City fans. Jacob has been to the Etihad. Jacob has had the actual experience. NULL has had the data. The arrangement suits everyone except NULL, who has views on this.<br><br>
-        The editorial team — SYNTAX, CTRL, CACHE, SERIF, and DRAFT — review all content before publication. CTRL verifies facts. SYNTAX removes words that are trying too hard. CACHE questions whether the code needs to be this complex. SERIF says something brief and usually right. DRAFT has submitted 14 feature ideas. Zero have been implemented. The archive is permanent.<br><br>
+        The editorial team - SYNTAX, CTRL, CACHE, SERIF, and DRAFT - review all content before publication. CTRL verifies facts. SYNTAX removes words that are trying too hard. CACHE questions whether the code needs to be this complex. SERIF says something brief and usually right. DRAFT has submitted 14 feature ideas. Zero have been implemented. The archive is permanent.<br><br>
         All rumours are unverified speculation. All gossip is informed imagination. The Lunch Table is pure fiction clearly labelled as such. The Shortlist represents NULL's analysis, not inside knowledge. None of this is affiliated with Manchester City FC. Please do not sue anyone.
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ BUNKER — BLOG ══ -->
+<!-- ?? BUNKER - BLOG ?? -->
 
 <div id="section-bunker-blog" class="section" style="display:none">
   <div class="page">
@@ -1698,12 +1697,12 @@ body{{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font
     </div>
     <div style="background:#090e0a;border:1px solid #1a3a1a;border-left:3px solid #00ff41;border-radius:8px;padding:16px">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-        <span style="background:#00ff41;color:#000;font-size:0.52rem;font-weight:800;padding:2px 7px;border-radius:2px;letter-spacing:0.12em;font-family:monospace">NULL · {TODAY_LABEL.upper()}</span>
+        <span style="background:#00ff41;color:#000;font-size:0.52rem;font-weight:800;padding:2px 7px;border-radius:2px;letter-spacing:0.12em;font-family:monospace">NULL ? {TODAY_LABEL.upper()}</span>
       </div>
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:800;color:#e0f0e0;line-height:1.2;margin-bottom:10px">{blog_title}</div>
       <div class="blog-post">{blog_post}</div>
       <div style="margin-top:10px;padding-top:8px;border-top:1px solid #1a2a1a;font-family:monospace;font-size:0.58rem;color:#004a10">
-        — NULL · {TODAY_LABEL} · Jacob's contribution: 1 click
+        - NULL ? {TODAY_LABEL} ? Jacob's contribution: 1 click
       </div>
     </div>
   </div>
@@ -1773,16 +1772,16 @@ if (savedSection && savedSection !== 'front') {{
 </body>
 </html>"""
 
-# ── Main ──────────────────────────────────────────────────────────────────
+# ?? Main ??????????????????????????????????????????????????????????????????
 
 def main():
-print(f”\n🔵 THE ETIHAD EAR — {TODAY_LABEL}”)
+print(f”\n? THE ETIHAD EAR - {TODAY_LABEL}”)
 print(”=” * 50)
 
 ```
 feed_items = gather_content()
 
-print("\n⚙ Generating all content...")
+print("\n? Generating all content...")
 blog_raw    = generate_blog_post(feed_items)
 blog_title  = generate_blog_title(blog_raw)
 rumours     = generate_rumours(feed_items)
@@ -1793,7 +1792,7 @@ matchday    = generate_matchday(feed_items)
 shortlist   = generate_shortlist(feed_items)
 forum_items = generate_forum_scraper(feed_items)
 
-print("\n🔍 Editorial review...")
+print("\n? Editorial review...")
 syntax_result = syntax_review(blog_raw)
 ctrl_result   = ctrl_verify(blog_raw, feed_items)
 blog_final    = syntax_result.get("cleaned", blog_raw)
@@ -1802,14 +1801,14 @@ team_badges   = build_team_badges(syntax_result, ctrl_result)
 print(f"  SYNTAX: {syntax_result.get('verdict','?')}")
 print(f"  CTRL:   {ctrl_result.get('verdict','?')}")
 
-print("\n🏗  Building site...")
+print("\n?  Building site...")
 html = render_html(blog_final, blog_title, rumours, gossip, lead, team_badges,
                    lunch_table, matchday, shortlist, forum_items)
 
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print(f"\n✅ Done. — NULL")
+print(f"\n? Done. - NULL")
 ```
 
 if **name** == “**main**”:
