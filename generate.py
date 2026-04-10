@@ -23,6 +23,71 @@ TODAY  = today.strftime("%Y-%m-%d")
 TODAY_LABEL = today.strftime("%-d %B %Y")
 DAY_NAME = today.strftime("%A")
 
+# -- Squad manifest -- updated manually, used by ALL generators and CTRL -----
+# This is the ground truth. NULL and CTRL both reference this.
+# Update when transfers/injuries change.
+
+SQUAD = {
+    "goalkeepers": [
+        "Gianluigi Donnarumma",
+        "James Trafford",
+        "Stefan Ortega",
+    ],
+    "defenders": [
+        "Manuel Akanji",
+        "Marc Guehi",
+        "Abdukodir Khusanov",
+        "Vitor Reis",
+        "Rayan Ait-Nouri",
+        "Matheus Nunes",
+        "Rico Lewis",
+    ],
+    "midfielders": [
+        "Rodri",
+        "Bernardo Silva",
+        "Tijjani Reijnders",
+        "Mateo Kovacic",
+        "Nico O'Reilly",
+        "Savinho",
+    ],
+    "forwards": [
+        "Erling Haaland",
+        "Jeremy Doku",
+        "Rayan Cherki",
+        "Antoine Semenyo",
+        "Omar Marmoush",
+        "Phil Foden",
+    ],
+    "injured_out": [
+        "Josko Gvardiol",   # tibial fracture, out until May 2026
+        "Ruben Dias",       # injured
+        "John Stones",      # injured
+    ],
+    "injured_doubt": [
+        "Rico Lewis",       # ankle, day-to-day
+    ],
+    "not_in_squad": [
+        "Kevin De Bruyne",  # left for Napoli, no longer at City
+        "Ederson",          # left club
+        "Kyle Walker",      # left club
+    ],
+}
+
+# Flat list for easy prompt injection
+SQUAD_CONTEXT = f"""CURRENT MANCHESTER CITY SQUAD (ground truth - do not contradict this):
+
+Available players:
+- Goalkeepers: {', '.join(SQUAD['goalkeepers'])}
+- Defenders: {', '.join(SQUAD['defenders'])}
+- Midfielders: {', '.join(SQUAD['midfielders'])}
+- Forwards: {', '.join(SQUAD['forwards'])}
+
+INJURED - OUT: {', '.join(SQUAD['injured_out'])}
+INJURED - DOUBT: {', '.join(SQUAD['injured_doubt'])}
+NOT AT CITY: {', '.join(SQUAD['not_in_squad'])} - DO NOT include these players in any City context.
+
+CRITICAL: Never suggest injured_out players for selection. Never mention not_in_squad players as City players."""
+
 # '' Sources '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # Tiered by reliability. NULL labels content accordingly in output.
 # CTRL uses these tiers to calibrate verification confidence.
@@ -457,17 +522,18 @@ Keep NULL's voice. Just remove the fat.""",
 
 
 def ctrl_verify(post_body, feed_items):
-    """CTRL checks facts against the feed."""
-    print("' CTRL verifying facts...")
+    """CTRL checks facts against feed and squad manifest."""
+    print("CTRL verifying facts...")
 
     feed_summary = "\n".join([f"- [{i['source']}] {i['title']}" for i in feed_items[:20]])
 
     msg = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=400,
-        system="""You are CTRL - fact checker at The Etihad Ear. No opinions. Only facts. You verify claims against available sources.
+        system="""You are CTRL - fact checker at The Etihad Ear. No opinions. Only facts.
+You verify claims against available sources AND the squad manifest.
 Return JSON only: {"flags": ["any unverified claims"], "verdict": "VERIFIED or FLAGGED", "note": "one sentence summary"}""",
-        messages=[{"role": "user", "content": f"Verify this post against these sources:\n\nSOURCES:\n{feed_summary}\n\nPOST:\n{post_body}"}]
+        messages=[{"role": "user", "content": f"Verify this post against sources and squad:\n\nSQUAD:\n{SQUAD_CONTEXT}\n\nSOURCES:\n{feed_summary}\n\nPOST:\n{post_body}"}]
     )
     raw = msg.content[0].text.strip()
     try:
@@ -477,11 +543,35 @@ Return JSON only: {"flags": ["any unverified claims"], "verdict": "VERIFIED or F
         return {"flags": [], "verdict": "VERIFIED", "note": "Sources checked."}
 
 
+def ctrl_verify_section(section_name, content_data, feed_items):
+    """CTRL checks a specific section for squad/fact errors."""
+    feed_summary = "\n".join([f"- [{i['source']}] {i['title']}" for i in feed_items[:15]])
+    msg = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=300,
+        system="""You are CTRL - fact checker. Check content against squad manifest.
+Flag any player who is injured_out, not at City, or factually wrong.
+Return JSON only: {"flags": ["issue 1"], "verdict": "VERIFIED or FLAGGED"}""",
+        messages=[{"role": "user", "content": f"Section: {section_name}\n\n{SQUAD_CONTEXT}\n\nSOURCES:\n{feed_summary}\n\nCONTENT:\n{json.dumps(content_data)[:2000]}"}]
+    )
+    raw = msg.content[0].text.strip()
+    try:
+        raw = raw[raw.index("{"):raw.rindex("}")+1]
+        result = json.loads(raw)
+        if result.get("flags"):
+            print(f"  CTRL flagged {section_name}: {result['flags']}")
+        return result
+    except:
+        return {"flags": [], "verdict": "VERIFIED"}
+
+
 def generate_rumours(feed_items):
     """NULL generates rumours in 3-part tabloid structure."""
     print("\n' NULL generating rumours...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+{SQUAD_CONTEXT}
 
 Feed data:
 {format_feed(feed_items)}
@@ -530,6 +620,8 @@ def generate_gossip(feed_items):
     print("\n' NULL generating gossip...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+{SQUAD_CONTEXT}
 
 Feed data:
 {format_feed(feed_items)}
@@ -851,6 +943,8 @@ def generate_matchday(feed_items, last_result=None):
     # Masterplan - next match
     masterplan_prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 
+{SQUAD_CONTEXT}
+
 Feed data:
 {format_feed(feed_items[:25])}
 
@@ -908,6 +1002,8 @@ Return JSON only:
     # Morning Glory - post match
     morning_prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
 
+{SQUAD_CONTEXT}
+
 Feed data:
 {format_feed(feed_items[:20])}
 
@@ -957,6 +1053,10 @@ def generate_shortlist(feed_items):
     print("\n' Generating The Shortlist...")
 
     prompt = f"""Today is {DAY_NAME} {TODAY_LABEL}.
+
+{SQUAD_CONTEXT}
+
+IMPORTANT: The shortlist is for INCOMING transfers only. Do not list any player already in the squad above.
 
 Feed data:
 {format_feed(feed_items[:30])}
@@ -1713,10 +1813,37 @@ def main():
     syntax_result = syntax_review(blog_raw)
     ctrl_result   = ctrl_verify(blog_raw, feed_items)
     blog_final    = syntax_result.get("cleaned", blog_raw)
+
+    # CTRL checks all sections against squad manifest
+    print("  CTRL checking all sections...")
+    ctrl_verify_section("Predicted XI", matchday.get("masterplan", {}).get("predicted_xi", []), feed_items)
+    ctrl_verify_section("Player Ratings", matchday.get("morning", {}).get("ratings", []), feed_items)
+    ctrl_verify_section("Shortlist", shortlist, feed_items)
+    ctrl_verify_section("Gossip", gossip, feed_items)
+
+    # Auto-sanitize Predicted XI ? remove any injured_out or not_in_squad players
+    unavailable = [p.lower() for p in SQUAD["injured_out"] + SQUAD["not_in_squad"]]
+    xi = matchday.get("masterplan", {}).get("predicted_xi", [])
+    for player in xi:
+        name = player.get("name", "").lower()
+        if any(u in name or name in u for u in unavailable):
+            print(f"  CTRL removed {player.get('name')} from XI - unavailable")
+            player["name"] = "TBC"
+            player["note"] = "CTRL: player unavailable"
+
+    # Auto-sanitize shortlist ? remove any current City players
+    all_city = [p.lower() for p in
+                SQUAD["goalkeepers"] + SQUAD["defenders"] +
+                SQUAD["midfielders"] + SQUAD["forwards"]]
+    shortlist = [p for p in shortlist
+                 if not any(c in p.get("name","").lower() or
+                            p.get("name","").lower() in c
+                            for c in all_city)]
+
     team_badges   = build_team_badges(syntax_result, ctrl_result)
 
-    print(f"  SYNTAX: {syntax_result.get('verdict',''')}")
-    print(f"  CTRL:   {ctrl_result.get('verdict',''')}")
+    print(f"  SYNTAX: {syntax_result.get('verdict','')}")
+    print(f"  CTRL:   {ctrl_result.get('verdict','')}")
 
     print("\n'  Building site...")
     html = render_html(blog_final, blog_title, rumours, gossip, lead, team_badges,
