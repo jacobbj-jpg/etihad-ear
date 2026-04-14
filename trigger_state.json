@@ -1,6 +1,6 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-04-13",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-04-14",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -13,6 +13,7 @@
     "Ilkay G\u00fcndogan",
     "Enzo Fernandez",
     "Toni Kroos",
-    "Florian Wirtz"
+    "Florian Wirtz",
+    "Dani Olmo"
   ]
 }
