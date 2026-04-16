@@ -1,6 +1,6 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-04-15",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-04-16",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -15,6 +15,7 @@
     "Toni Kroos",
     "Florian Wirtz",
     "Dani Olmo",
-    "Joshua Kimmich"
+    "Joshua Kimmich",
+    "Pedri"
   ]
 }
