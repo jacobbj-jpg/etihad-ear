@@ -1,6 +1,6 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-04-16",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-04-17",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -16,6 +16,7 @@
     "Florian Wirtz",
     "Dani Olmo",
     "Joshua Kimmich",
-    "Pedri"
+    "Pedri",
+    "Marcus Rashford"
   ]
 }
