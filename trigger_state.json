@@ -1,6 +1,6 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-04-17",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-04-18",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -17,6 +17,7 @@
     "Dani Olmo",
     "Joshua Kimmich",
     "Pedri",
-    "Marcus Rashford"
+    "Marcus Rashford",
+    "Nico Williams"
   ]
 }
