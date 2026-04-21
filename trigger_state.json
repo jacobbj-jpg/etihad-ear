@@ -1,6 +1,6 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-04-20",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-04-21",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -20,6 +20,7 @@
     "Marcus Rashford",
     "Nico Williams",
     "Jadon Sancho",
-    "Martin Zubimendi"
+    "Martin Zubimendi",
+    "Leroy San\u00e9"
   ]
 }
