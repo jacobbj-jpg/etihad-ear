@@ -1,6 +1,6 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-04-23",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-04-24",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -23,6 +23,7 @@
     "Martin Zubimendi",
     "Leroy San\u00e9",
     "Pedri",
-    "Theo Hernandez"
+    "Theo Hernandez",
+    "Florian Wirtz"
   ]
 }
