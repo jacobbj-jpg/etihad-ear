@@ -1,6 +1,6 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-04-25",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-04-26",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -25,6 +25,7 @@
     "Pedri",
     "Theo Hernandez",
     "Florian Wirtz",
-    "Pedro Neto"
+    "Pedro Neto",
+    "Xavi Simons"
   ]
 }
