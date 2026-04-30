@@ -1,6 +1,6 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-04-29",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-04-30",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -29,6 +29,7 @@
     "Xavi Simons",
     "Lamine Yamal",
     "Marcus Rashford",
-    "Bruno Fernandes"
+    "Bruno Fernandes",
+    "Jonathan Tah"
   ]
 }
