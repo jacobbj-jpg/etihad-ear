@@ -1,6 +1,6 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-04-30",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-05-01",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -30,6 +30,7 @@
     "Lamine Yamal",
     "Marcus Rashford",
     "Bruno Fernandes",
-    "Jonathan Tah"
+    "Jonathan Tah",
+    "Nico Williams"
   ]
 }
