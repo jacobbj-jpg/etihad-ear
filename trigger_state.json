@@ -1,6 +1,6 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-05-01",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-05-02",
   "used_players": [
     "Cole Palmer",
     "Ilkay G\u00fcndogan",
@@ -31,6 +31,7 @@
     "Marcus Rashford",
     "Bruno Fernandes",
     "Jonathan Tah",
-    "Nico Williams"
+    "Nico Williams",
+    "Luis D\u00edaz"
   ]
 }
