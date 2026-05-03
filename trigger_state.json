@@ -1,8 +1,7 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-05-02",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-05-03",
   "used_players": [
-    "Cole Palmer",
     "Ilkay G\u00fcndogan",
     "Nico Williams",
     "Ademola Lookman",
@@ -32,6 +31,7 @@
     "Bruno Fernandes",
     "Jonathan Tah",
     "Nico Williams",
-    "Luis D\u00edaz"
+    "Luis D\u00edaz",
+    "Pedro Neto"
   ]
 }
