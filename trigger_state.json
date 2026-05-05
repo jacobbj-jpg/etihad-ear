@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-05-04",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-05-05",
   "used_players": [
-    "Nico Williams",
     "Ademola Lookman",
     "Florian Wirtz",
     "Eberechi Eze",
@@ -32,6 +31,7 @@
     "Nico Williams",
     "Luis D\u00edaz",
     "Pedro Neto",
-    "Florian Wirtz"
+    "Florian Wirtz",
+    "Raheem Sterling"
   ]
 }
