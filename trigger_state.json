@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-05-05",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-05-06",
   "used_players": [
-    "Ademola Lookman",
     "Florian Wirtz",
     "Eberechi Eze",
     "Ferran Torres",
@@ -32,6 +31,7 @@
     "Luis D\u00edaz",
     "Pedro Neto",
     "Florian Wirtz",
-    "Raheem Sterling"
+    "Raheem Sterling",
+    "Bukayo Saka"
   ]
 }
