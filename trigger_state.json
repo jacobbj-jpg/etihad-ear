@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-05-06",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-05-07",
   "used_players": [
-    "Florian Wirtz",
     "Eberechi Eze",
     "Ferran Torres",
     "Pedri",
@@ -32,6 +31,7 @@
     "Pedro Neto",
     "Florian Wirtz",
     "Raheem Sterling",
-    "Bukayo Saka"
+    "Bukayo Saka",
+    "Jonathan Tah"
   ]
 }
