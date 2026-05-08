@@ -1,8 +1,7 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-05-07",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-05-08",
   "used_players": [
-    "Eberechi Eze",
     "Ferran Torres",
     "Pedri",
     "Ilkay G\u00fcndogan",
@@ -32,6 +31,7 @@
     "Florian Wirtz",
     "Raheem Sterling",
     "Bukayo Saka",
-    "Jonathan Tah"
+    "Jonathan Tah",
+    "Theo Hern\u00e1ndez"
   ]
 }
