@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-05-08",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-05-09",
   "used_players": [
-    "Ferran Torres",
     "Pedri",
     "Ilkay G\u00fcndogan",
     "Enzo Fernandez",
@@ -32,6 +31,7 @@
     "Raheem Sterling",
     "Bukayo Saka",
     "Jonathan Tah",
-    "Theo Hern\u00e1ndez"
+    "Theo Hern\u00e1ndez",
+    "Nico Williams"
   ]
 }
