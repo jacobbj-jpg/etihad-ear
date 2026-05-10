@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-05-09",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-05-10",
   "used_players": [
-    "Pedri",
     "Ilkay G\u00fcndogan",
     "Enzo Fernandez",
     "Toni Kroos",
@@ -32,6 +31,7 @@
     "Bukayo Saka",
     "Jonathan Tah",
     "Theo Hern\u00e1ndez",
-    "Nico Williams"
+    "Nico Williams",
+    "Ilkay G\u00fcndogan"
   ]
 }
