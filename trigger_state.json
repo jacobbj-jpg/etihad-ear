@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-05-12",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-05-13",
   "used_players": [
-    "Toni Kroos",
     "Florian Wirtz",
     "Dani Olmo",
     "Joshua Kimmich",
@@ -32,6 +31,7 @@
     "Nico Williams",
     "Ilkay G\u00fcndogan",
     "Pedro Neto",
-    "Xabi Alonso"
+    "Xabi Alonso",
+    "Florian Wirtz"
   ]
 }
