@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-05-13",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-05-14",
   "used_players": [
-    "Florian Wirtz",
     "Dani Olmo",
     "Joshua Kimmich",
     "Pedri",
@@ -32,6 +31,7 @@
     "Ilkay G\u00fcndogan",
     "Pedro Neto",
     "Xabi Alonso",
-    "Florian Wirtz"
+    "Florian Wirtz",
+    "Lamine Yamal"
   ]
 }
