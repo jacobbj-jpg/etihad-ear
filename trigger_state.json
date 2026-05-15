@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-05-14",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-05-15",
   "used_players": [
-    "Dani Olmo",
     "Joshua Kimmich",
     "Pedri",
     "Marcus Rashford",
@@ -32,6 +31,7 @@
     "Pedro Neto",
     "Xabi Alonso",
     "Florian Wirtz",
-    "Lamine Yamal"
+    "Lamine Yamal",
+    "Marcus Rashford"
   ]
 }
