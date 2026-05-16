@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-05-15",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-05-16",
   "used_players": [
-    "Joshua Kimmich",
     "Pedri",
     "Marcus Rashford",
     "Nico Williams",
@@ -32,6 +31,7 @@
     "Xabi Alonso",
     "Florian Wirtz",
     "Lamine Yamal",
-    "Marcus Rashford"
+    "Marcus Rashford",
+    "Dani Olmo"
   ]
 }
