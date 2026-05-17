@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-05-16",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-05-17",
   "used_players": [
-    "Pedri",
     "Marcus Rashford",
     "Nico Williams",
     "Jadon Sancho",
@@ -32,6 +31,7 @@
     "Florian Wirtz",
     "Lamine Yamal",
     "Marcus Rashford",
-    "Dani Olmo"
+    "Dani Olmo",
+    "Alphonso Davies"
   ]
 }
