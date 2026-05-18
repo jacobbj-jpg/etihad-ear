@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-05-17",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-05-18",
   "used_players": [
-    "Marcus Rashford",
     "Nico Williams",
     "Jadon Sancho",
     "Martin Zubimendi",
@@ -32,6 +31,7 @@
     "Lamine Yamal",
     "Marcus Rashford",
     "Dani Olmo",
-    "Alphonso Davies"
+    "Alphonso Davies",
+    "Raheem Sterling"
   ]
 }
