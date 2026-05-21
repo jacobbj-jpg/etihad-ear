@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-05-20",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-05-21",
   "used_players": [
-    "Martin Zubimendi",
     "Leroy San\u00e9",
     "Pedri",
     "Theo Hernandez",
@@ -32,6 +31,7 @@
     "Alphonso Davies",
     "Raheem Sterling",
     "Pedro Neto",
-    "Toni Kroos"
+    "Toni Kroos",
+    "Nico Williams"
   ]
 }
