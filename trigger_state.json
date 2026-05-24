@@ -1,8 +1,7 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-05-23",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-05-24",
   "used_players": [
-    "Theo Hernandez",
     "Florian Wirtz",
     "Pedro Neto",
     "Xavi Simons",
@@ -32,6 +31,7 @@
     "Toni Kroos",
     "Nico Williams",
     "Pedri",
-    "Dani Olmo"
+    "Dani Olmo",
+    "Florian Wirtz"
   ]
 }
