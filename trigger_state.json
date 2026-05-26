@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-05-25",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-05-26",
   "used_players": [
-    "Pedro Neto",
     "Xavi Simons",
     "Lamine Yamal",
     "Marcus Rashford",
@@ -32,6 +31,7 @@
     "Pedri",
     "Dani Olmo",
     "Florian Wirtz",
-    "Ilkay G\u00fcndogan"
+    "Ilkay G\u00fcndogan",
+    "Marcus Rashford"
   ]
 }
