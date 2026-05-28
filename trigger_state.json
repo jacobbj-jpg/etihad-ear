@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-05-27",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-05-28",
   "used_players": [
-    "Lamine Yamal",
     "Marcus Rashford",
     "Bruno Fernandes",
     "Jonathan Tah",
@@ -32,6 +31,7 @@
     "Florian Wirtz",
     "Ilkay G\u00fcndogan",
     "Marcus Rashford",
-    "Lamine Yamal"
+    "Lamine Yamal",
+    "Pedro Porro"
   ]
 }
