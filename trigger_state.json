@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-05-30",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-05-31",
   "used_players": [
-    "Jonathan Tah",
     "Nico Williams",
     "Luis D\u00edaz",
     "Pedro Neto",
@@ -32,6 +31,7 @@
     "Lamine Yamal",
     "Pedro Porro",
     "Pedri",
-    "Bruno Fernandes"
+    "Bruno Fernandes",
+    "Theo Hern\u00e1ndez"
   ]
 }
