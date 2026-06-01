@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-05-31",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-06-01",
   "used_players": [
-    "Nico Williams",
     "Luis D\u00edaz",
     "Pedro Neto",
     "Florian Wirtz",
@@ -32,6 +31,7 @@
     "Pedro Porro",
     "Pedri",
     "Bruno Fernandes",
-    "Theo Hern\u00e1ndez"
+    "Theo Hern\u00e1ndez",
+    "Marcus Rashford"
   ]
 }
