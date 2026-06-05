@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-06-04",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-06-05",
   "used_players": [
-    "Raheem Sterling",
     "Bukayo Saka",
     "Jonathan Tah",
     "Theo Hern\u00e1ndez",
@@ -32,6 +31,7 @@
     "Marcus Rashford",
     "Bukayo Saka",
     "Nuno Mendes",
-    "Florian Wirtz"
+    "Florian Wirtz",
+    "Milos Kerkez"
   ]
 }
