@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-06-06",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-06-07",
   "used_players": [
-    "Jonathan Tah",
     "Theo Hern\u00e1ndez",
     "Nico Williams",
     "Ilkay G\u00fcndogan",
@@ -32,6 +31,7 @@
     "Nuno Mendes",
     "Florian Wirtz",
     "Milos Kerkez",
-    "Ilkay G\u00fcndogan"
+    "Ilkay G\u00fcndogan",
+    "Nico Williams"
   ]
 }
