@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-06-07",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-06-08",
   "used_players": [
-    "Theo Hern\u00e1ndez",
     "Nico Williams",
     "Ilkay G\u00fcndogan",
     "Pedro Neto",
@@ -32,6 +31,7 @@
     "Florian Wirtz",
     "Milos Kerkez",
     "Ilkay G\u00fcndogan",
-    "Nico Williams"
+    "Nico Williams",
+    "Rodrigo Bentancur"
   ]
 }
