@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-06-08",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-06-09",
   "used_players": [
-    "Nico Williams",
     "Ilkay G\u00fcndogan",
     "Pedro Neto",
     "Xabi Alonso",
@@ -32,6 +31,7 @@
     "Milos Kerkez",
     "Ilkay G\u00fcndogan",
     "Nico Williams",
-    "Rodrigo Bentancur"
+    "Rodrigo Bentancur",
+    "Xabi Alonso"
   ]
 }
