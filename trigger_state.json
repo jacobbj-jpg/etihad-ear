@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-06-09",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-06-10",
   "used_players": [
-    "Ilkay G\u00fcndogan",
     "Pedro Neto",
     "Xabi Alonso",
     "Florian Wirtz",
@@ -32,6 +31,7 @@
     "Ilkay G\u00fcndogan",
     "Nico Williams",
     "Rodrigo Bentancur",
-    "Xabi Alonso"
+    "Xabi Alonso",
+    "Pedro Neto"
   ]
 }
