@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-06-11",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-06-12",
   "used_players": [
-    "Xabi Alonso",
     "Florian Wirtz",
     "Lamine Yamal",
     "Marcus Rashford",
@@ -32,6 +31,7 @@
     "Rodrigo Bentancur",
     "Xabi Alonso",
     "Pedro Neto",
-    "Bernardo Silva"
+    "Bernardo Silva",
+    "Theo Hernandez"
   ]
 }
