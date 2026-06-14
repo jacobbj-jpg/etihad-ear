@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-06-13",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-06-14",
   "used_players": [
-    "Lamine Yamal",
     "Marcus Rashford",
     "Dani Olmo",
     "Alphonso Davies",
@@ -32,6 +31,7 @@
     "Pedro Neto",
     "Bernardo Silva",
     "Theo Hernandez",
-    "Nico Williams"
+    "Nico Williams",
+    "Ilkay G\u00fcndo\u011fan"
   ]
 }
