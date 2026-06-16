@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-06-15",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-06-16",
   "used_players": [
-    "Dani Olmo",
     "Alphonso Davies",
     "Raheem Sterling",
     "Pedro Neto",
@@ -32,6 +31,7 @@
     "Theo Hernandez",
     "Nico Williams",
     "Ilkay G\u00fcndo\u011fan",
-    "Marcus Rashford"
+    "Marcus Rashford",
+    "Trent Alexander-Arnold"
   ]
 }
