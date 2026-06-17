@@ -1,8 +1,7 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-06-16",
+  "last_trigger": "PERSONAL_SITUATION",
+  "last_trigger_date": "2026-06-17",
   "used_players": [
-    "Alphonso Davies",
     "Raheem Sterling",
     "Pedro Neto",
     "Toni Kroos",
@@ -32,6 +31,7 @@
     "Nico Williams",
     "Ilkay G\u00fcndo\u011fan",
     "Marcus Rashford",
-    "Trent Alexander-Arnold"
+    "Trent Alexander-Arnold",
+    "Xabi Alonso"
   ]
 }
