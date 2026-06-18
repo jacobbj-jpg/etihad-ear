@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-06-17",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-06-18",
   "used_players": [
-    "Raheem Sterling",
     "Pedro Neto",
     "Toni Kroos",
     "Nico Williams",
@@ -32,6 +31,7 @@
     "Ilkay G\u00fcndo\u011fan",
     "Marcus Rashford",
     "Trent Alexander-Arnold",
-    "Xabi Alonso"
+    "Xabi Alonso",
+    "Florian Wirtz"
   ]
 }
