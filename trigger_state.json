@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-06-18",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-06-19",
   "used_players": [
-    "Pedro Neto",
     "Toni Kroos",
     "Nico Williams",
     "Pedri",
@@ -32,6 +31,7 @@
     "Marcus Rashford",
     "Trent Alexander-Arnold",
     "Xabi Alonso",
-    "Florian Wirtz"
+    "Florian Wirtz",
+    "Alphonso Davies"
   ]
 }
