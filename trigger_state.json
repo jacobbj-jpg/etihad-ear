@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-06-19",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-06-20",
   "used_players": [
-    "Toni Kroos",
     "Nico Williams",
     "Pedri",
     "Dani Olmo",
@@ -32,6 +31,7 @@
     "Trent Alexander-Arnold",
     "Xabi Alonso",
     "Florian Wirtz",
-    "Alphonso Davies"
+    "Alphonso Davies",
+    "Bruno Fernandes"
   ]
 }
