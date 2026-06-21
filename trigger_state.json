@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-06-20",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-06-21",
   "used_players": [
-    "Nico Williams",
     "Pedri",
     "Dani Olmo",
     "Florian Wirtz",
@@ -32,6 +31,7 @@
     "Xabi Alonso",
     "Florian Wirtz",
     "Alphonso Davies",
-    "Bruno Fernandes"
+    "Bruno Fernandes",
+    "Fede Valverde"
   ]
 }
