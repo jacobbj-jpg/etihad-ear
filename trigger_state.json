@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-06-22",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-06-23",
   "used_players": [
-    "Dani Olmo",
     "Florian Wirtz",
     "Ilkay G\u00fcndogan",
     "Marcus Rashford",
@@ -32,6 +31,7 @@
     "Alphonso Davies",
     "Bruno Fernandes",
     "Fede Valverde",
-    "Nico Paz"
+    "Nico Paz",
+    "Pedri"
   ]
 }
