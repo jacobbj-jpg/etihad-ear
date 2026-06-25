@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-06-24",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-06-25",
   "used_players": [
-    "Ilkay G\u00fcndogan",
     "Marcus Rashford",
     "Lamine Yamal",
     "Pedro Porro",
@@ -32,6 +31,7 @@
     "Fede Valverde",
     "Nico Paz",
     "Pedri",
-    "Raheem Sterling"
+    "Raheem Sterling",
+    "Florian Wirtz"
   ]
 }
