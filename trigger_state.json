@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-06-25",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-06-26",
   "used_players": [
-    "Marcus Rashford",
     "Lamine Yamal",
     "Pedro Porro",
     "Pedri",
@@ -32,6 +31,7 @@
     "Nico Paz",
     "Pedri",
     "Raheem Sterling",
-    "Florian Wirtz"
+    "Florian Wirtz",
+    "Theo Hern\u00e1ndez"
   ]
 }
