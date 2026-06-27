@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-06-26",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-06-27",
   "used_players": [
-    "Lamine Yamal",
     "Pedro Porro",
     "Pedri",
     "Bruno Fernandes",
@@ -32,6 +31,7 @@
     "Pedri",
     "Raheem Sterling",
     "Florian Wirtz",
-    "Theo Hern\u00e1ndez"
+    "Theo Hern\u00e1ndez",
+    "Nico Williams"
   ]
 }
