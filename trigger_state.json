@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-06-27",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-06-28",
   "used_players": [
-    "Pedro Porro",
     "Pedri",
     "Bruno Fernandes",
     "Theo Hern\u00e1ndez",
@@ -32,6 +31,7 @@
     "Raheem Sterling",
     "Florian Wirtz",
     "Theo Hern\u00e1ndez",
-    "Nico Williams"
+    "Nico Williams",
+    "Marcus Rashford"
   ]
 }
