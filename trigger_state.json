@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-06-28",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-06-29",
   "used_players": [
-    "Pedri",
     "Bruno Fernandes",
     "Theo Hern\u00e1ndez",
     "Marcus Rashford",
@@ -32,6 +31,7 @@
     "Florian Wirtz",
     "Theo Hern\u00e1ndez",
     "Nico Williams",
-    "Marcus Rashford"
+    "Marcus Rashford",
+    "Lamine Yamal"
   ]
 }
