@@ -1,8 +1,7 @@
 {
-  "last_trigger": "PERSONAL_SITUATION",
-  "last_trigger_date": "2026-06-30",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-07-01",
   "used_players": [
-    "Theo Hern\u00e1ndez",
     "Marcus Rashford",
     "Bukayo Saka",
     "Nuno Mendes",
@@ -32,6 +31,7 @@
     "Nico Williams",
     "Marcus Rashford",
     "Lamine Yamal",
-    "Ilkay G\u00fcndo\u011fan"
+    "Ilkay G\u00fcndo\u011fan",
+    "Leandro Trossard"
   ]
 }
