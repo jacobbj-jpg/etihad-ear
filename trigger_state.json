@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-07-02",
+  "last_trigger": "TACTICAL_FIT",
+  "last_trigger_date": "2026-07-03",
   "used_players": [
-    "Bukayo Saka",
     "Nuno Mendes",
     "Florian Wirtz",
     "Milos Kerkez",
@@ -32,6 +31,7 @@
     "Lamine Yamal",
     "Ilkay G\u00fcndo\u011fan",
     "Leandro Trossard",
-    "Raheem Sterling"
+    "Raheem Sterling",
+    "Pedri"
   ]
 }
