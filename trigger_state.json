@@ -1,8 +1,7 @@
 {
-  "last_trigger": "TACTICAL_FIT",
-  "last_trigger_date": "2026-07-03",
+  "last_trigger": "UNHAPPY_PLAYER",
+  "last_trigger_date": "2026-07-04",
   "used_players": [
-    "Nuno Mendes",
     "Florian Wirtz",
     "Milos Kerkez",
     "Ilkay G\u00fcndogan",
@@ -32,6 +31,7 @@
     "Ilkay G\u00fcndo\u011fan",
     "Leandro Trossard",
     "Raheem Sterling",
-    "Pedri"
+    "Pedri",
+    "Marcus Rashford"
   ]
 }
