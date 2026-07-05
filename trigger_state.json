@@ -1,8 +1,7 @@
 {
-  "last_trigger": "UNHAPPY_PLAYER",
-  "last_trigger_date": "2026-07-04",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-07-05",
   "used_players": [
-    "Florian Wirtz",
     "Milos Kerkez",
     "Ilkay G\u00fcndogan",
     "Nico Williams",
@@ -32,6 +31,7 @@
     "Leandro Trossard",
     "Raheem Sterling",
     "Pedri",
-    "Marcus Rashford"
+    "Marcus Rashford",
+    "Nico Williams"
   ]
 }
