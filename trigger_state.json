@@ -1,8 +1,7 @@
 {
-  "last_trigger": "GUT_FEELING",
-  "last_trigger_date": "2026-07-05",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-07-06",
   "used_players": [
-    "Milos Kerkez",
     "Ilkay G\u00fcndogan",
     "Nico Williams",
     "Rodrigo Bentancur",
@@ -32,6 +31,7 @@
     "Raheem Sterling",
     "Pedri",
     "Marcus Rashford",
-    "Nico Williams"
+    "Nico Williams",
+    "Martin Zubimendi"
   ]
 }
