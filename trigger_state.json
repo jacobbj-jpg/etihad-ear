@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-07-06",
+  "last_trigger": "CONTRACT_EXPIRY",
+  "last_trigger_date": "2026-07-07",
   "used_players": [
-    "Ilkay G\u00fcndogan",
     "Nico Williams",
     "Rodrigo Bentancur",
     "Xabi Alonso",
@@ -32,6 +31,7 @@
     "Pedri",
     "Marcus Rashford",
     "Nico Williams",
-    "Martin Zubimendi"
+    "Martin Zubimendi",
+    "Joshua Kimmich"
   ]
 }
