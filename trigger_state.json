@@ -1,8 +1,7 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-07-07",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-07-08",
   "used_players": [
-    "Nico Williams",
     "Rodrigo Bentancur",
     "Xabi Alonso",
     "Pedro Neto",
@@ -32,6 +31,7 @@
     "Marcus Rashford",
     "Nico Williams",
     "Martin Zubimendi",
-    "Joshua Kimmich"
+    "Joshua Kimmich",
+    "Theo Hernandez"
   ]
 }
