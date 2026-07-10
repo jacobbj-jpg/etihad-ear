@@ -1,8 +1,7 @@
 {
-  "last_trigger": "CONTRACT_EXPIRY",
-  "last_trigger_date": "2026-07-09",
+  "last_trigger": "POSITION_CRISIS",
+  "last_trigger_date": "2026-07-10",
   "used_players": [
-    "Xabi Alonso",
     "Pedro Neto",
     "Bernardo Silva",
     "Theo Hernandez",
@@ -32,6 +31,7 @@
     "Martin Zubimendi",
     "Joshua Kimmich",
     "Theo Hernandez",
-    "Fede Valverde"
+    "Fede Valverde",
+    "Destiny Udogie"
   ]
 }
