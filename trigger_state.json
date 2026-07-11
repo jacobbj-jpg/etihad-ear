@@ -1,8 +1,7 @@
 {
-  "last_trigger": "POSITION_CRISIS",
-  "last_trigger_date": "2026-07-10",
+  "last_trigger": "GUT_FEELING",
+  "last_trigger_date": "2026-07-11",
   "used_players": [
-    "Pedro Neto",
     "Bernardo Silva",
     "Theo Hernandez",
     "Nico Williams",
@@ -32,6 +31,7 @@
     "Joshua Kimmich",
     "Theo Hernandez",
     "Fede Valverde",
-    "Destiny Udogie"
+    "Destiny Udogie",
+    "Nico Williams"
   ]
 }
